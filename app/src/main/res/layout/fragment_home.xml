@@ -5,4 +5,228 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Upper CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upperCardView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#7e9684">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="monospace"
+                    android:text="Discover:"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/title_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="monospace"
+                    android:layout_below="@+id/title_text"
+                    android:text="Find a new pet for you!"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/top_bar_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/paws_img" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/search_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_text"
+                    android:layout_marginTop="50dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="8dp">
+
+                    <EditText
+                        android:id="@+id/search_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Search"
+                        android:padding="8dp"
+                        android:background="@android:color/transparent"
+                        android:drawableStart="@drawable/ico_search"
+                        android:drawablePadding="8dp"
+                        android:inputType="text" />
+
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Lower CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/lowerCardView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#f0ac61"
+            app:cardCornerRadius="20dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:padding="15dp"
+                        android:text="Visit Your Nearest Shelter"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                    <!-- First Horizontal ScrollView with LinearLayout inside -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- Additional views can be added here -->
+                            <ImageView
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/nearshelter1"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/nearshelter2"
+                                android:layout_marginStart="10dp" />
+
+                            <ImageView
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/nearshelter1"
+                                android:layout_marginStart="10dp"/>
+
+                            <!-- Add more images or views here -->
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shelter's Available Pets"
+                        android:padding="15dp"
+                        android:fontFamily="monospace"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/white"/>
+
+                    <!-- Second Horizontal ScrollView with LinearLayout inside -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- Additional views can be added here -->
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet1"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet2"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet3"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet4"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet1"
+                                android:layout_marginStart="10dp"/>
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/shelterpet2"
+                                android:layout_marginStart="10dp"/>
+
+                            <!-- Add more images or views here -->
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pets for Adoption"
+                        android:padding="15dp"
+                        android:fontFamily="monospace"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/white"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/recyclerView"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="15dp"
+                        android:paddingBottom="15dp"/>
+
+                            <!-- Add more images or views here -->
+                </LinearLayout>
+            </ScrollView>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </FrameLayout>
