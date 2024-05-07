@@ -27,6 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Glide.with(context).load(dataList.get(position).getImageURL()).into(holder.recyclerImage);
         holder.recyclerCaption.setText(dataList.get(position).getCaption());
     }
+
     @Override
     public int getItemCount() {
         return dataList.size();
