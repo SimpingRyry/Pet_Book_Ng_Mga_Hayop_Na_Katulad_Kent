@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petbook.databinding.ItemConttainerUserBinding;
+import com.example.petbook.listeners.UserListerner;
 import com.example.petbook.models.User;
 
 import java.util.List;
 
 public class UserAdapters extends RecyclerView.Adapter<UserAdapters.UserViewHolder>{
     private final List<User> users;
-
-    public UserAdapters(List<User> users) {
+    private final UserListerner userListerner;
+    public UserAdapters(List<User> users, UserListerner userListerner) {
         this.users = users;
+        this.userListerner = userListerner;
     }
 
     @NonNull
@@ -51,6 +53,9 @@ public class UserAdapters extends RecyclerView.Adapter<UserAdapters.UserViewHold
             binding.textname.setText(user.name);
             binding.textemail.setText(user.email);
             binding.imageprog.setImageBitmap(getUserImage(user.image));
+            binding.getRoot().setOnClickListener(view -> {
+                userListerner.OnUserClicked(user);
+            });
         }
 
 

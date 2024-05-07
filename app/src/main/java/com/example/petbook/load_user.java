@@ -1,5 +1,6 @@
 package com.example.petbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petbook.adapters.UserAdapters;
+import com.example.petbook.listeners.UserListerner;
 import com.example.petbook.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class load_user extends Fragment {
+public class load_user extends Fragment implements UserListerner {
 
     // TODO: Rename parameter arguments, choose names that match
 
@@ -76,7 +80,7 @@ public class load_user extends Fragment {
                 }
 
                 if (users.size() != 0) {
-                    UserAdapters userAdapters = new UserAdapters(users);
+                    UserAdapters userAdapters = new UserAdapters(users,load_user.this::OnUserClicked);
                     userrecycler.setAdapter(userAdapters);
                     userrecycler.setVisibility(View.VISIBLE);
                 } else {
@@ -90,6 +94,14 @@ public class load_user extends Fragment {
                 // Handle onCancelled event
             }
         });
+    }
+
+    @Override
+    public void OnUserClicked(User user) {
+        Intent intent = new Intent(getActivity(), chat2.class);
+        intent.putExtra("user", user); // Replace "key" with your desired key and "value" with the actual value you want to pass
+        startActivity(intent);
+
     }
 }
 
