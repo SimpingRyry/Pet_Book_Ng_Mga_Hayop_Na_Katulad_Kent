@@ -76,6 +76,7 @@ public class load_user extends Fragment implements UserListerner {
                     user.email = snapshot.child("email").getValue(String.class);
 
                     user.image = snapshot.child("image").getValue(String.class);
+                    user.id = snapshot.getKey();
                     users.add(user);
                 }
 

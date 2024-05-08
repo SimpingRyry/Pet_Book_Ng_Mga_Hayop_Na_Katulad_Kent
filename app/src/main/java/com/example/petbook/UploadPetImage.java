@@ -100,7 +100,7 @@ public class UploadPetImage extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         DataClass dataClass = new DataClass(uri.toString(), caption);
                         String key = databaseReference.push().getKey();
-                        databaseReference.child("joriz").child("images").child(key).setValue(dataClass);
+                        databaseReference.child("ver").child("images").child(key).setValue(dataClass);
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(UploadPetImage.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UploadPetImage.this, MainActivity.class);

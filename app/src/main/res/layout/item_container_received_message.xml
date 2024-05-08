@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="8dp"
     android:padding="4dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -20,11 +21,14 @@
         android:layout_width="0dp"
         android:id="@+id/textmessage2"
         android:layout_height="wrap_content"
+        app:layout_constraintWidth_max="wrap"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:background="@drawable/bg_receive_message"
-        android:padding="12dp"
-        android:textColor="@color/black"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"        android:textColor="@color/black"
         android:textSize="13sp"
         app:layout_constraintStart_toEndOf="@id/imageprofile"
         app:layout_constraintTop_toTopOf="parent"

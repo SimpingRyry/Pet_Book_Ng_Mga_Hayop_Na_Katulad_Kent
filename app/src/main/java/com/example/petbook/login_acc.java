@@ -4,13 +4,18 @@ package com.example.petbook;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +28,9 @@ public class login_acc extends AppCompatActivity {
     ImageButton signin;
     TextView signup_redirect;
     Intent intent;
+    private FirebaseAuth mAuth;
     String data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +42,7 @@ public class login_acc extends AppCompatActivity {
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
-
+        mAuth = FirebaseAuth.getInstance();
         signin = findViewById(R.id.signin);
         signup_redirect = findViewById(R.id.signup);
 
@@ -62,6 +69,13 @@ public class login_acc extends AppCompatActivity {
         });
 
 
+    }
+
+    public void saveLoggedInUser(Context context, String username) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("loggedInUser", username);
+        editor.apply();
     }
 
     public Boolean validateUsername(){
@@ -105,6 +119,9 @@ public class login_acc extends AppCompatActivity {
                     if (passwordFromDB.equals(userPassword)) {
                         username.setError(null);
 
+                        saveLoggedInUser(getApplicationContext(), userUsername);
+
+
                         //Pass the data using intent
 
                         String nameFromDB = snapshot.child(userUsername).child("name").getValue(String.class);
@@ -115,6 +132,8 @@ public class login_acc extends AppCompatActivity {
                         intent.putExtra("name", nameFromDB);
                         intent.putExtra("email", emailFromDB);
                         intent.putExtra("username", usernameFromDB);
+
+
 
 
 
@@ -138,5 +157,6 @@ public class login_acc extends AppCompatActivity {
 
 
     }
+
 
 }

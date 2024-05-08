@@ -44,6 +44,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
     implementation("com.google.firebase:firebase-storage:21.0.0")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation("androidx.activity:activity:1.8.0")
     implementation("com.airbnb.android:lottie:3.7.0")
