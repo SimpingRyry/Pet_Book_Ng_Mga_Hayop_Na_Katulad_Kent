@@ -76,8 +76,8 @@ public class MessagesFragment extends Fragment implements ConversationListener {
 
         byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
-       roundedImageView.setImageBitmap(bitmap);
-       listenConvo(loggedInUser,listenmessages(pbar,convorecycler));
+        roundedImageView.setImageBitmap(bitmap);
+        listenConvo(loggedInUser,listenmessages(pbar,convorecycler));
 
         floatingActionButton = rootview.findViewById(R.id.floatingActionButton);
 
@@ -97,16 +97,16 @@ public class MessagesFragment extends Fragment implements ConversationListener {
     }
 
     private void init(RecyclerView convorecyclerView){
-    conversations = new ArrayList<>();
-    recentConversationAdapter = new Recent_Conversation_Adapter(conversations,this);
-    convorecyclerView.setAdapter(recentConversationAdapter);
-    reference = FirebaseDatabase.getInstance().getReference("users");
+        conversations = new ArrayList<>();
+        recentConversationAdapter = new Recent_Conversation_Adapter(conversations,this);
+        convorecyclerView.setAdapter(recentConversationAdapter);
+        reference = FirebaseDatabase.getInstance().getReference("users");
 
-    ;
+        ;
 
 
     }
-    private ValueEventListener listenmessages(ProgressBar progressBar,RecyclerView recyclerView){
+    private ValueEventListener listenmessages(ProgressBar progressBar, RecyclerView recyclerView) {
         ValueEventListener chateventlistener = new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -118,7 +118,8 @@ public class MessagesFragment extends Fragment implements ConversationListener {
                     // Check if this conversation already exists in the list
                     boolean conversationExists = false;
                     for (ChatMessage existingMessage : conversations) {
-                        if (existingMessage.senderid.equals(senderId) && existingMessage.receiverId.equals(receiverId)) {
+                        if ((existingMessage.senderid.equals(senderId) && existingMessage.receiverId.equals(receiverId)) ||
+                                (existingMessage.senderid.equals(receiverId) && existingMessage.receiverId.equals(senderId))) {
                             // Update the existing conversation
                             existingMessage.message = lastMessage;
                             existingMessage.dateobject = timestamp;
