@@ -9,12 +9,14 @@ import android.util.Base64;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.petbook.adapters.ChatAdapter;
+import com.example.petbook.adapters.Recent_Conversation_Adapter;
 import com.example.petbook.databinding.ActivityChat2Binding;
 import com.example.petbook.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -32,21 +35,47 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EventListener;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class chat2 extends AppCompatActivity {
 private User receiveruser;
 private ActivityChat2Binding binding;
 private ChatAdapter chatAdapter;
+Recent_Conversation_Adapter conversationAdapter;
 FirebaseAuth mAuth ;
+private List<ChatMessage> chatMessages;
+    private SharedPreferences preferences;
+
+
+
+
+    String conversationid = null;
+    private final ValueEventListener conversionValueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                // Assuming you're interested in the first child node
+                DataSnapshot firstChildSnapshot = dataSnapshot.getChildren().iterator().next();
+                conversationid = firstChildSnapshot.getKey();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            // Handle onCancelled event
+        }
+    };
+
     FirebaseUser currentUser;
 
     String User_id;
     DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference("chat");
 
 
-    private List<ChatMessage> chatMessages;
+
 
     ValueEventListener eventListener = new ValueEventListener() {
         @Override
@@ -109,6 +138,9 @@ FirebaseAuth mAuth ;
 
                 // Hide the progress bar
                 binding.pbar2.setVisibility(View.GONE);
+                if(conversationid != null){
+                    checkforconvo();
+                }
             }
         }
 
@@ -124,6 +156,7 @@ FirebaseAuth mAuth ;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         binding = ActivityChat2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -246,14 +279,34 @@ FirebaseAuth mAuth ;
     binding.layoutSend.setOnClickListener(view -> sendMessage());}
 
     private void sendMessage(){
+        if (conversationid != null){
+            updateMessages(binding.inputMessage.getText().toString());
+        }
+        else {
+            checkForExistingConversation();
+
+
+        }
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("chat");
         String userId = usersRef.push().getKey();
         usersRef.child(userId).child("senderID").setValue(User_id);
         usersRef.child(userId).child("receiverID").setValue(receiveruser.id);
         usersRef.child(userId).child("message").setValue(binding.inputMessage.getText().toString());
         usersRef.child(userId).child("timestamp").setValue(new Date());
-        binding.inputMessage.setText(null);
 
+
+
+
+
+
+
+    }
+
+    private void checkforconvo(){
+        if(chatMessages.size() != 0){
+            checkForConversationRemotely2(preferences.getString("loggedInUser", ""),receiveruser.id);
+            checkForConversationRemotely2(receiveruser.id,preferences.getString("loggedInUser", ""));
+        }
 
 
     }
@@ -263,5 +316,109 @@ FirebaseAuth mAuth ;
     private String getreadabledate(Date date){
         return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
+
+//    private void checkForConversationRemotely(String senderId, String receiverId) {
+//        DatabaseReference conversationsRef = FirebaseDatabase.getInstance().getReference("conversations");
+//
+//        conversationsRef.orderByChild("senderId").equalTo(senderId)
+//                .addListenerForSingleValueEvent(conversionValueEventListener);
+//    }
+
+    private void addToFirebaseDatabase(HashMap<String, Object> conversation) {
+        DatabaseReference conversationsRef = FirebaseDatabase.getInstance().getReference("conversations");
+        conversationsRef.push().setValue(conversation, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    String conversationId = databaseReference.getKey();
+                    // Do something with the conversationId if needed
+                } else {
+                    // Handle the error
+                }
+            }
+        });
+    }
+
+    private void updateMessages(String message) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("conversations").child(conversationid);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("lastMessage", message);
+        updates.put("timestamp",new Date());
+
+        databaseReference.updateChildren(updates);
+    }
+
+
+    public void checkForConversationRemotely2(String senderId, String receiverId) {
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference conversationsRef = database.getReference("conversations");
+
+        conversationsRef.orderByChild("senderId").equalTo(senderId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String receiverId = snapshot.child("receiverId").getValue(String.class);
+                    if (receiverId != null && receiverId.equals(receiverId)) {
+                        conversationid = snapshot.getKey();
+                        // Do something with the conversationId
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle potential errors here
+                System.err.println("Error: " + databaseError.getMessage());
+            }
+        });
+    }
+    private void checkForExistingConversation() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference conversationsRef = database.getReference("conversations");
+
+        conversationsRef.orderByChild("senderId").equalTo(User_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String receiverId = snapshot.child("receiverId").getValue(String.class);
+                    if (receiverId != null && receiverId.equals(receiveruser.id)) {
+                        conversationid = snapshot.getKey();
+                        // Update existing conversation
+                        updateMessages(binding.inputMessage.getText().toString());
+                        binding.inputMessage.setText(null);
+                        return;
+                    }
+                }
+                // No existing conversation found, create a new one
+                createNewConversation();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle potential errors here
+                System.err.println("Error: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void createNewConversation() {
+        // Create a new conversation entry
+        HashMap<String, Object> conversation = new HashMap<>();
+        conversation.put("senderId", User_id);
+        conversation.put("receiverId", receiveruser.id);
+        conversation.put("lastMessage", binding.inputMessage.getText().toString());
+        conversation.put("timestamp", new Date());
+        conversation.put("senderImage",preferences.getString("userprof", ""));
+        conversation.put("receiverName", receiveruser.name);
+        conversation.put("receiverImage",receiveruser.image);
+        conversation.put("senderName",preferences.getString("name", ""));
+        addToFirebaseDatabase(conversation);
+        binding.inputMessage.setText(null);
+    }
+
 }
 

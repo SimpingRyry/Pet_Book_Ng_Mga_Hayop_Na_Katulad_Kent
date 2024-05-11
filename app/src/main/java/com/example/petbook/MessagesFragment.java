@@ -1,25 +1,87 @@
 package com.example.petbook;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.petbook.adapters.Recent_Conversation_Adapter;
+import com.example.petbook.databinding.ActivityMainBinding;
+import com.example.petbook.listeners.ConversationListener;
+import com.example.petbook.models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.makeramen.roundedimageview.RoundedImageView;
 
-public class MessagesFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+public class MessagesFragment extends Fragment implements ConversationListener {
+    private List<ChatMessage>  conversations;
+
 
     FloatingActionButton floatingActionButton;
+    private SharedPreferences preferences;
+    private ActivityMainBinding binding;
+    TextView username;
+    RoundedImageView roundedImageView;
+
+
+    private Recent_Conversation_Adapter recentConversationAdapter;
+
+
+    RecyclerView convorecycler;
+
+    DatabaseReference reference ;
+    ProgressBar pbar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
 
         View rootview = inflater.inflate(R.layout.fragment_messages, container, false);
+        convorecycler = rootview.findViewById(R.id.conversationrecycler);
+
+        init(convorecycler);
+        username = rootview.findViewById(R.id.acc_name);
+        roundedImageView = rootview.findViewById(R.id.profile);
+        pbar = rootview.findViewById(R.id.pbar3);
+
+
+        String loggedInUser = preferences.getString("loggedInUser", "");
+        String userProf = preferences.getString("userprof", "");
+        username.setText(loggedInUser);
+
+        byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+       roundedImageView.setImageBitmap(bitmap);
+       listenConvo(loggedInUser,listenmessages(pbar,convorecycler));
+
         floatingActionButton = rootview.findViewById(R.id.floatingActionButton);
+
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,5 +96,103 @@ public class MessagesFragment extends Fragment {
         return rootview;
     }
 
+    private void init(RecyclerView convorecyclerView){
+    conversations = new ArrayList<>();
+    recentConversationAdapter = new Recent_Conversation_Adapter(conversations,this);
+    convorecyclerView.setAdapter(recentConversationAdapter);
+    reference = FirebaseDatabase.getInstance().getReference("users");
 
+    ;
+
+
+    }
+    private ValueEventListener listenmessages(ProgressBar progressBar,RecyclerView recyclerView){
+        ValueEventListener chateventlistener = new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Iterate over the children of the DataSnapshot
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Retrieve data from the snapshot
+                    String senderId = snapshot.child("senderId").getValue(String.class);
+                    String receiverId = snapshot.child("receiverId").getValue(String.class);
+
+                    // Check if the chat message already exists in the list
+                    boolean isMessageExists = false;
+                    for (ChatMessage existingMessage : conversations) {
+                        if (existingMessage.senderid.equals(senderId) && existingMessage.receiverId.equals(receiverId)) {
+                            // This message already exists in the list, so it's a modification
+                            isMessageExists = true;
+                            // Optionally, you can update the existing message with the new data
+                            existingMessage.senderid = senderId;
+                            existingMessage.receiverId = receiverId;
+                            existingMessage.message = snapshot.child("lastMessage").getValue(String.class);
+                            existingMessage.dateobject = snapshot.child("timestamp").getValue(Date.class);
+                            // Add other fields if needed
+                            break;
+                        }
+                    }
+
+                    // If the message doesn't exist in the list, it's a new message
+                    if (!isMessageExists) {
+
+
+                        // Handle the new data (added document)
+                        // For example, you can create a ChatMessage object and add it to your list of chat messages
+                        ChatMessage chatMessage = new ChatMessage();
+                        chatMessage.senderid = senderId;
+                        chatMessage.receiverId = receiverId;
+                        if (preferences.getString("loggedInUser", "").equals(senderId)){
+                            chatMessage.conversationImage = snapshot.child("receiverImage").getValue(String.class);
+                            chatMessage.conversationname = snapshot.child("receiverName").getValue(String.class);
+                            chatMessage.conversationId =  snapshot.child("receiverId").getValue(String.class);
+
+                        }
+                        else {
+                            chatMessage.conversationImage = snapshot.child("senderImage").getValue(String.class);
+                            chatMessage.conversationname = snapshot.child("senderName").getValue(String.class);
+                            chatMessage.conversationId =  snapshot.child("senderId").getValue(String.class);
+
+                        }
+                        chatMessage.message = snapshot.child("lastMessage").getValue(String.class);
+                        chatMessage.dateobject = snapshot.child("timestamp").getValue(Date.class);
+                        conversations.add(chatMessage);
+                    }
+                }
+
+                Collections.sort(conversations , (obj1 , obj2) -> obj2.dateobject.compareTo(obj1.dateobject));
+                recentConversationAdapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(0);
+                recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle potential errors here
+            }
+        };
+
+        return  chateventlistener;
+
+    }
+    private void listenConvo(String userID, ValueEventListener valueEventListener) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("conversations");
+
+        // Query for conversations where the logged-in user is the sender
+        Query query1 = databaseReference.orderByChild("senderId").equalTo(userID);
+        query1.addValueEventListener(valueEventListener);
+
+        // Query for conversations where the logged-in user is the receiver
+        Query query2 = databaseReference.orderByChild("receiverId").equalTo(userID);
+        query2.addValueEventListener(valueEventListener);
+    }
+
+
+    @Override
+    public void OnConversationClicked(User user) {
+        Intent intent = new Intent(getActivity(), chat2.class);
+        intent.putExtra("user", user); // Add extras if needed
+        startActivity(intent);
+    }
 }
