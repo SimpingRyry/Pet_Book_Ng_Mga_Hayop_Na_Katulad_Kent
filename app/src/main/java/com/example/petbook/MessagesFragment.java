@@ -109,62 +109,51 @@ public class MessagesFragment extends Fragment implements ConversationListener {
     private ValueEventListener listenmessages(ProgressBar progressBar,RecyclerView recyclerView){
         ValueEventListener chateventlistener = new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Iterate over the children of the DataSnapshot
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Retrieve data from the snapshot
                     String senderId = snapshot.child("senderId").getValue(String.class);
                     String receiverId = snapshot.child("receiverId").getValue(String.class);
+                    String lastMessage = snapshot.child("lastMessage").getValue(String.class);
+                    Date timestamp = snapshot.child("timestamp").getValue(Date.class);
 
-                    // Check if the chat message already exists in the list
-                    boolean isMessageExists = false;
+                    // Check if this conversation already exists in the list
+                    boolean conversationExists = false;
                     for (ChatMessage existingMessage : conversations) {
                         if (existingMessage.senderid.equals(senderId) && existingMessage.receiverId.equals(receiverId)) {
-                            // This message already exists in the list, so it's a modification
-                            isMessageExists = true;
-                            // Optionally, you can update the existing message with the new data
-                            existingMessage.senderid = senderId;
-                            existingMessage.receiverId = receiverId;
-                            existingMessage.message = snapshot.child("lastMessage").getValue(String.class);
-                            existingMessage.dateobject = snapshot.child("timestamp").getValue(Date.class);
-                            // Add other fields if needed
+                            // Update the existing conversation
+                            existingMessage.message = lastMessage;
+                            existingMessage.dateobject = timestamp;
+                            conversationExists = true;
                             break;
                         }
                     }
 
-                    // If the message doesn't exist in the list, it's a new message
-                    if (!isMessageExists) {
-
-
-                        // Handle the new data (added document)
-                        // For example, you can create a ChatMessage object and add it to your list of chat messages
+                    if (!conversationExists) {
+                        // Create a new conversation
                         ChatMessage chatMessage = new ChatMessage();
                         chatMessage.senderid = senderId;
                         chatMessage.receiverId = receiverId;
                         if (preferences.getString("loggedInUser", "").equals(senderId)){
                             chatMessage.conversationImage = snapshot.child("receiverImage").getValue(String.class);
                             chatMessage.conversationname = snapshot.child("receiverName").getValue(String.class);
-                            chatMessage.conversationId =  snapshot.child("receiverId").getValue(String.class);
-
-                        }
-                        else {
+                            chatMessage.conversationId =  receiverId;
+                        } else {
                             chatMessage.conversationImage = snapshot.child("senderImage").getValue(String.class);
                             chatMessage.conversationname = snapshot.child("senderName").getValue(String.class);
-                            chatMessage.conversationId =  snapshot.child("senderId").getValue(String.class);
-
+                            chatMessage.conversationId = senderId;
                         }
-                        chatMessage.message = snapshot.child("lastMessage").getValue(String.class);
-                        chatMessage.dateobject = snapshot.child("timestamp").getValue(Date.class);
+                        chatMessage.message = lastMessage;
+                        chatMessage.dateobject = timestamp;
                         conversations.add(chatMessage);
                     }
                 }
 
+                // Sort conversations by timestamp
                 Collections.sort(conversations , (obj1 , obj2) -> obj2.dateobject.compareTo(obj1.dateobject));
+                // Notify adapter of data changes
                 recentConversationAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(0);
                 recyclerView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
-
-
             }
 
             @Override
@@ -173,8 +162,7 @@ public class MessagesFragment extends Fragment implements ConversationListener {
             }
         };
 
-        return  chateventlistener;
-
+        return chateventlistener;
     }
     private void listenConvo(String userID, ValueEventListener valueEventListener) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("conversations");

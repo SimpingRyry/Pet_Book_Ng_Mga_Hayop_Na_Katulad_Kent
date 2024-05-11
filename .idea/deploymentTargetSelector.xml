@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="Splash_pet">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-08T00:29:29.381974700Z">
+        <DropdownSelection timestamp="2024-05-11T07:35:32.690338800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Pokong Andoy\.android\avd\Pixel_5_API_30.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Pokong Andoy\.android\avd\Pixel_5_API_24.avd" />
             </handle>
           </Target>
         </DropdownSelection>
