@@ -41,12 +41,12 @@ import java.util.Locale;
 import java.util.Map;
 
 public class chat2 extends AppCompatActivity {
-private User receiveruser;
-private ActivityChat2Binding binding;
-private ChatAdapter chatAdapter;
-Recent_Conversation_Adapter conversationAdapter;
-FirebaseAuth mAuth ;
-private List<ChatMessage> chatMessages;
+    private User receiveruser;
+    private ActivityChat2Binding binding;
+    private ChatAdapter chatAdapter;
+    Recent_Conversation_Adapter conversationAdapter;
+    FirebaseAuth mAuth ;
+    private List<ChatMessage> chatMessages;
     private SharedPreferences preferences;
 
 
@@ -275,8 +275,8 @@ private List<ChatMessage> chatMessages;
     }
 
     private void setListeners(){
-    binding.imageback.setOnClickListener(view -> onBackPressed());
-    binding.layoutSend.setOnClickListener(view -> sendMessage());}
+        binding.imageback.setOnClickListener(view -> onBackPressed());
+        binding.layoutSend.setOnClickListener(view -> sendMessage());}
 
     private void sendMessage(){
         if (conversationid != null){
@@ -421,4 +421,3 @@ private List<ChatMessage> chatMessages;
     }
 
 }
-
