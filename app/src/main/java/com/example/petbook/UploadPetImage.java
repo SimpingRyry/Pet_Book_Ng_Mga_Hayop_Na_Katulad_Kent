@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -36,6 +38,7 @@ public class UploadPetImage extends AppCompatActivity {
     EditText uploadCaption;
     ProgressBar progressBar;
     private Uri imageUri;
+    private SharedPreferences preferences;
     final  private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
     final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -44,6 +47,7 @@ public class UploadPetImage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_pet_image);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         uploadButton = findViewById(R.id.uploadButton);
         uploadCaption = findViewById(R.id.uploadCaption);
@@ -100,7 +104,7 @@ public class UploadPetImage extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         DataClass dataClass = new DataClass(uri.toString(), caption);
                         String key = databaseReference.push().getKey();
-                        databaseReference.child("ver").child("images").child(key).setValue(dataClass);
+                        databaseReference.child(preferences.getString("loggedInUser", "")).child("images").child(key).setValue(dataClass);
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(UploadPetImage.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UploadPetImage.this, MainActivity.class);

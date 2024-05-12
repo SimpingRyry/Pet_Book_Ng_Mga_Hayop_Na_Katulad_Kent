@@ -2,20 +2,15 @@ package com.example.petbook;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,9 +24,7 @@ public class LostAndFoundFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<DataClass> dataList;
     private MyAdapter adapter;
-//    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//    String User_id = preferences.getString("loggedInUser", null);
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child("ver").child("images");
+    private DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +44,9 @@ public class LostAndFoundFragment extends Fragment {
         adapter = new MyAdapter(getContext(), dataList);
         recyclerView.setAdapter(adapter);
 
+        // Initialize database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
         databaseReference.addValueEventListener(new ValueEventListener() {
 
             @SuppressLint("NotifyDataSetChanged")
@@ -58,12 +54,14 @@ public class LostAndFoundFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataList.clear(); // Clear existing data
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String key = dataSnapshot.getKey();
-                    String imageUrl = dataSnapshot.child("imageURL").getValue(String.class);
-                    String description = dataSnapshot.child("caption").getValue(String.class);
-                    // Create DataClass object manually
-                    DataClass dataClass = new DataClass(imageUrl, description);
-                    dataList.add(dataClass);
+                    // For each user
+                    for (DataSnapshot imageSnapshot : dataSnapshot.child("images").getChildren()) {
+                        String imageUrl = imageSnapshot.child("imageURL").getValue(String.class);
+                        String caption = imageSnapshot.child("caption").getValue(String.class);
+                        // Create DataClass object for each image
+                        DataClass dataClass = new DataClass(imageUrl, caption);
+                        dataList.add(dataClass);
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
