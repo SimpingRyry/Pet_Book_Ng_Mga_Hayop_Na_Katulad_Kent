@@ -71,13 +71,15 @@ public class login_acc extends AppCompatActivity {
 
     }
 
-    public void saveLoggedInUser(Context context, String username, String imageprof,String name) {
+    public void saveLoggedInUser(Context context, String username, String imageprof,String name, String address, String email) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("loggedInUser", username);
         editor.putString("userprof",imageprof);
         editor.putString("name", name);
         editor.putString("account_type", "user_account");
+        editor.putString("address", address);
+        editor.putString("email", email);
         editor.apply();
     }
 
@@ -131,8 +133,9 @@ public class login_acc extends AppCompatActivity {
                         String emailFromDB = snapshot.child(userUsername).child("email").getValue(String.class);
                         String usernameFromDB = snapshot.child(userUsername).child("username").getValue(String.class);
                         String imageprof = snapshot.child(userUsername).child("image").getValue(String.class);
+                        String address = snapshot.child(userUsername).child("address").getValue(String.class);
 
-                        saveLoggedInUser(getApplicationContext(), userUsername,imageprof,nameFromDB);
+                        saveLoggedInUser(getApplicationContext(), userUsername,imageprof,nameFromDB,address,emailFromDB);
 
 
                         Intent intent = new Intent(login_acc.this, MainActivity.class);
