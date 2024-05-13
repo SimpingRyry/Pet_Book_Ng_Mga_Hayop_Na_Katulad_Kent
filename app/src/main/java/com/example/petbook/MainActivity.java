@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements LostAndFoundFragment.OnButton1ClickListener,DonationsAdapter.OnButtonClickListener{
+public class MainActivity extends AppCompatActivity implements DonationsAdapter.OnButtonClickListener{
     String SECRET_KEY = "sk_test_51PFSUlAj3m1FbFF3DFbkUifQl1vQSVGMg2AVRrY3Yd14JAGaE5pFSQFKm36Po02vtENJyYvddsT0ctBlKIn8CMwe00pUU1m63p";
     String PUBLISH_KEY = "pk_test_51PFSUlAj3m1FbFF3kXjFCtmENiu9tQTngjmVPrvq5rNGoN3FwUIQAUIru8vLgf84qeVWgh5vSu9SFkyH04uYDXUP00sVb4JUiI"; PaymentSheet paymentsheet;
     String customerID;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
                     customerID = object.getString("id");
 
 
-                    Toast.makeText(MainActivity.this, customerID, Toast.LENGTH_SHORT).show();
+
                     getEphiricalkey(customerID);
 
 
@@ -128,10 +128,7 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onButton1Click() {
-                 paymentFlow();
-    }
+
 
     private void getEphiricalkey(String customerID) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/ephemeral_keys", new Response.Listener<String>() {
@@ -142,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
                     EphericalKey = object.getString("id");
                     getClientSecret(customerID,EphericalKey);
 
-                    Toast.makeText(MainActivity.this, EphericalKey, Toast.LENGTH_SHORT).show();
+
 
 
                 } catch (JSONException e) {
@@ -187,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
                     JSONObject object = new JSONObject(s);
                     ClientSecret = object.getString("client_secret");
 
-                    Toast.makeText(MainActivity.this, ClientSecret, Toast.LENGTH_SHORT).show();
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
