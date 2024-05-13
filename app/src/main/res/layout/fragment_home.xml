@@ -47,12 +47,14 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <ImageView
+                <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/top_bar_image"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:background="@drawable/background_icon"
+                    app:riv_oval="true"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/paws_img" />
+               />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/search_card"

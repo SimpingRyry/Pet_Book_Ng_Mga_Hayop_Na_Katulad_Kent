@@ -41,10 +41,11 @@ public class MessagesFragment extends Fragment implements ConversationListener {
 
 
     FloatingActionButton floatingActionButton;
-    private SharedPreferences preferences;
+
     private ActivityMainBinding binding;
     TextView username;
     RoundedImageView roundedImageView;
+    private SharedPreferences preferences;
 
 
     private Recent_Conversation_Adapter recentConversationAdapter;

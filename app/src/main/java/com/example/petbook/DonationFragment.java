@@ -2,6 +2,9 @@ package com.example.petbook;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
@@ -29,6 +35,8 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
     private DonationsAdapter adapter;
     private DatabaseReference databaseReference;
     FloatingActionButton fab;
+    RoundedImageView roundedImageView;
+    private SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +48,14 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        roundedImageView = view.findViewById(R.id.top_bar_image);
+        String userProf = preferences.getString("userprof", "");
+
+
+        byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
+        roundedImageView.setImageBitmap(bitmap);
 
 
 
