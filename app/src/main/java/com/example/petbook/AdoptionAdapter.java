@@ -16,9 +16,9 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.ArrayList;
 
 public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyViewHolder> {
-    ArrayList<DataClass> dataList;
+    ArrayList<AdoptionDataClass> dataList;
     Context context;
-    public AdoptionAdapter(ArrayList<DataClass> dataList, Context context) {
+    public AdoptionAdapter(ArrayList<AdoptionDataClass> dataList, Context context) {
         this.dataList = dataList;
         this.context = context;
     }
@@ -31,10 +31,11 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
     }
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Glide.with(context).load(dataList.get(position).getImageURL()).into(holder.staggeredImages);
-        holder.staggeredCaption.setText(dataList.get(position).getCaption());
+        Glide.with(context).load(dataList.get(position).getPet_image()).into(holder.staggeredImages);
+        holder.petage.setText(dataList.get(position).getPetage());
+        holder.staggeredCaption.setText(dataList.get(position).getPetname());
         holder.staggeredContact.setText(dataList.get(position).getContact());
-        holder.staggeredStatus.setText(dataList.get(position).getStatus());
+        holder.staggeredStatus.setText(dataList.get(position).getOwner());
 
     }
     @Override
@@ -43,14 +44,15 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView staggeredImages;
-        TextView staggeredCaption, staggeredContact, staggeredStatus;
+        TextView staggeredCaption, staggeredContact, staggeredStatus,petage;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            petage = itemView.findViewById(R.id.staggeredage);
             staggeredImages = itemView.findViewById(R.id.staggeredImages);
             staggeredCaption = itemView.findViewById(R.id.staggeredCaption);
             staggeredContact = itemView.findViewById(R.id.staggeredContact);
             staggeredStatus = itemView.findViewById(R.id.staggeredStatus);
-        }
+    }
     }
 }

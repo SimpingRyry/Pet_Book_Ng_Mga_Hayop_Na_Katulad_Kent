@@ -131,56 +131,12 @@
                         android:textColor="@color/white"/>
 
                     <!-- Second Horizontal ScrollView with LinearLayout inside -->
-                    <HorizontalScrollView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/shelterpets"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <!-- Additional views can be added here -->
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet1"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet2"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet3"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet4"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet1"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="80dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/shelterpet2"
-                                android:layout_marginStart="10dp"/>
-
-                            <!-- Add more images or views here -->
-                        </LinearLayout>
-                    </HorizontalScrollView>
+                        android:orientation="horizontal"
+                        android:padding="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -205,4 +161,12 @@
             </ScrollView>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/plus_btn"
+        android:backgroundTint="#7E9684"/>
 </FrameLayout>

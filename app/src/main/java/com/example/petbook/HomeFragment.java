@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +31,15 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    private RecyclerView recyclerView, recyclerView1;
+    private RecyclerView recyclerView, recyclerView1,shelterpets;
     private ArrayList<shelterDataClass> dataList;
     private ArrayList<DataClass> dataList1;
+    private ArrayList<AdoptionDataClass> dataList2;
     private ShelterAdapter adapter;
     private AdoptionAdapter adapter1;
+    private AdoptionAdapter2 adapter2;
+    FloatingActionButton fab;
+
     private DatabaseReference databaseReference, databaseReference1;
     private SharedPreferences preferences;
     RoundedImageView roundedImageView;
@@ -46,6 +51,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        fab = view.findViewById(R.id.fab);
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         roundedImageView = view.findViewById(R.id.top_bar_image);
         String userProf = preferences.getString("userprof", "");
@@ -87,11 +93,71 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        shelterpets = view.findViewById(R.id.shelterpets);
+        shelterpets.setHasFixedSize(true);
+        shelterpets.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        dataList2 = new ArrayList<>();
+        adapter2 = new AdoptionAdapter2(dataList2,getContext());
+        shelterpets.setAdapter(adapter2);
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), UploadAdoption.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+        databaseReference1 = FirebaseDatabase.getInstance().getReference("users").child("shelter");
+        databaseReference1.addValueEventListener(new ValueEventListener() {
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                dataList2.clear(); // Clear existing data
+                // Iterate through each child of "users"
+                    // Check if the child is "shelter" or "user_account"
+                        // Iterate through each account under "shelter" or "user_account"
+                for (DataSnapshot userChild : snapshot.getChildren()) {
+                    // Check if the child is "shelter" or "user_account"
+
+                        // Iterate through each account under "shelter" or "user_account"
+
+                            // Get the "images" node under each account
+                            DataSnapshot imagesNode = userChild.child("adoptions");
+                            // Iterate through each image under the "images" node
+                            for (DataSnapshot imageSnapshot : imagesNode.getChildren()) {
+                                String imageUrl = imageSnapshot.child("pet_image").getValue(String.class);
+                                String caption = imageSnapshot.child("petname").getValue(String.class);
+                                String petage = imageSnapshot.child("petage").getValue(String.class);
+                                String contact = imageSnapshot.child("contact").getValue(String.class);
+                                String owner = imageSnapshot.child("owner").getValue(String.class);
+                                // Create DataClass object for each image
+                                AdoptionDataClass dataClass = new AdoptionDataClass(imageUrl, caption, petage,contact,owner);
+                                dataList2.add(dataClass);
+                            }
+
+
+                }
+
+
+                adapter2.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors
+            }
+        });
+
+
+
+
         recyclerView1 = view.findViewById(R.id.adoptionRecycler);
         recyclerView1.setHasFixedSize(true);
         recyclerView1.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         dataList1 = new ArrayList<>();
-        adapter1 = new AdoptionAdapter(dataList1, getContext());
+        adapter1 = new AdoptionAdapter(dataList2, getContext());
         recyclerView1.setAdapter(adapter1);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
@@ -100,7 +166,7 @@ public class HomeFragment extends Fragment {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dataList1.clear(); // Clear existing data
+                dataList2.clear(); // Clear existing data
                 // Iterate through each child of "users"
                 for (DataSnapshot userChild : snapshot.getChildren()) {
                     // Check if the child is "shelter" or "user_account"
@@ -108,16 +174,17 @@ public class HomeFragment extends Fragment {
                         // Iterate through each account under "shelter" or "user_account"
                         for (DataSnapshot accountSnapshot : userChild.getChildren()) {
                             // Get the "images" node under each account
-                            DataSnapshot imagesNode = accountSnapshot.child("images");
+                            DataSnapshot imagesNode = accountSnapshot.child("adoptions");
                             // Iterate through each image under the "images" node
                             for (DataSnapshot imageSnapshot : imagesNode.getChildren()) {
-                                String imageUrl = imageSnapshot.child("imageURL").getValue(String.class);
-                                String caption = imageSnapshot.child("caption").getValue(String.class);
+                                String imageUrl = imageSnapshot.child("pet_image").getValue(String.class);
+                                String caption = imageSnapshot.child("petname").getValue(String.class);
+                                String petage = imageSnapshot.child("petage").getValue(String.class);
                                 String contact = imageSnapshot.child("contact").getValue(String.class);
-                                String status = imageSnapshot.child("status").getValue(String.class);
+                                String owner = imageSnapshot.child("owner").getValue(String.class);
                                 // Create DataClass object for each image
-                                DataClass dataClass = new DataClass(imageUrl, caption, contact,status);
-                                dataList1.add(dataClass);
+                                AdoptionDataClass dataClass = new AdoptionDataClass(imageUrl, caption, petage,contact,owner);
+                                dataList2.add(dataClass);
                             }
                         }
                     }
@@ -132,4 +199,5 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
 }
