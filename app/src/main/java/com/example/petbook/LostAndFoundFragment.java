@@ -55,7 +55,7 @@ public class LostAndFoundFragment extends Fragment {
     FloatingActionButton fab;
     private RecyclerView recyclerView;
     private ArrayList<DataClass> dataList;
-    private MyAdapter adapter;
+    private LostAndFoundAdapter adapter;
     Button lostbtn;
 
     private DatabaseReference databaseReference;
@@ -110,7 +110,7 @@ public class LostAndFoundFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dataList = new ArrayList<>();
-        adapter = new MyAdapter(getContext(), dataList);
+        adapter = new LostAndFoundAdapter(getContext(), dataList);
         recyclerView.setAdapter(adapter);
 
 
