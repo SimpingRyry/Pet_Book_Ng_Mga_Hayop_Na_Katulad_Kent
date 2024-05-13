@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#7e9684"
     tools:context=".HomeFragment">
 
     <LinearLayout
@@ -195,7 +196,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/recyclerView"
+                        android:id="@+id/adoptionRecycler"
                         android:paddingStart="0dp"
                         android:paddingEnd="15dp"
                         android:paddingBottom="15dp"/>
