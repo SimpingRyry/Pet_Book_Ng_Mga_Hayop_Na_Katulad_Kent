@@ -9,10 +9,10 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class LostAndFoundAdapter extends RecyclerView.Adapter<LostAndFoundAdapter.MyViewHolder> {
     private ArrayList<DataClass> dataList;
     private Context context;
-    public MyAdapter(Context context, ArrayList<DataClass> dataList) {
+    public LostAndFoundAdapter(Context context, ArrayList<DataClass> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
