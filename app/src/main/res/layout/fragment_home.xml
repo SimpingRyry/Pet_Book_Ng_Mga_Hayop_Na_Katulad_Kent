@@ -192,14 +192,13 @@
                         android:textStyle="bold"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/white"/>
-
                     <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/adoptionRecycler"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="15dp"
-                        android:paddingBottom="15dp"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="8dp"/>
+
 
                             <!-- Add more images or views here -->
                 </LinearLayout>

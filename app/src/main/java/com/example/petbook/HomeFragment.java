@@ -94,8 +94,8 @@ public class HomeFragment extends Fragment {
         adapter1 = new AdoptionAdapter(dataList1, getContext());
         recyclerView1.setAdapter(adapter1);
 
-        databaseReference1 = FirebaseDatabase.getInstance().getReference("users");
-        databaseReference1.addValueEventListener(new ValueEventListener() {
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        databaseReference.addValueEventListener(new ValueEventListener() {
 
             @SuppressLint("NotifyDataSetChanged")
             @Override

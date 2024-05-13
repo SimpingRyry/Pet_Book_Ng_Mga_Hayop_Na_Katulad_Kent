@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,7 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
         return dataList.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        RoundedImageView staggeredImages;
+        ImageView staggeredImages;
         TextView staggeredCaption, staggeredContact, staggeredStatus;
 
         public MyViewHolder(@NonNull View itemView) {
