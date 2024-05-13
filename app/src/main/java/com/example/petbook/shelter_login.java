@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class login_acc extends AppCompatActivity {
+public class shelter_login extends AppCompatActivity {
     EditText username,password;
     ImageButton signin;
     TextView signup_redirect;
@@ -35,7 +35,7 @@ public class login_acc extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_acc);
+        setContentView(R.layout.activity_shelter_login);
 
         intent = getIntent();
         data = intent.getStringExtra("key");
@@ -49,7 +49,7 @@ public class login_acc extends AppCompatActivity {
         signup_redirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(login_acc.this, signup.class);
+                Intent intent = new Intent(shelter_login.this, shelter_signup.class);
                 intent.putExtra("name", data);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -77,7 +77,7 @@ public class login_acc extends AppCompatActivity {
         editor.putString("loggedInUser", username);
         editor.putString("userprof",imageprof);
         editor.putString("name", name);
-        editor.putString("account_type", "user_account");
+        editor.putString("account_type", "shelter");
         editor.apply();
     }
 
@@ -108,7 +108,7 @@ public class login_acc extends AppCompatActivity {
         String userUsername = username.getText().toString().trim();
         String userPassword = password.getText().toString().trim();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child("user_account");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child("shelter");
         Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
 
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -135,7 +135,7 @@ public class login_acc extends AppCompatActivity {
                         saveLoggedInUser(getApplicationContext(), userUsername,imageprof,nameFromDB);
 
 
-                        Intent intent = new Intent(login_acc.this, MainActivity.class);
+                        Intent intent = new Intent(shelter_login.this, MainActivity.class);
                         intent.putExtra("name", nameFromDB);
                         intent.putExtra("email", emailFromDB);
                         intent.putExtra("username", usernameFromDB);

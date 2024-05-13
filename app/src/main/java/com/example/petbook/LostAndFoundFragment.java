@@ -120,7 +120,6 @@ public void onAttach(Context context) {
 
 
 
-        // Initialize database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -129,14 +128,26 @@ public void onAttach(Context context) {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dataList.clear(); // Clear existing data
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    // For each user
-                    for (DataSnapshot imageSnapshot : dataSnapshot.child("images").getChildren()) {
-                        String imageUrl = imageSnapshot.child("imageURL").getValue(String.class);
-                        String caption = imageSnapshot.child("caption").getValue(String.class);
-                        // Create DataClass object for each image
-                        DataClass dataClass = new DataClass(imageUrl, caption);
-                        dataList.add(dataClass);
+
+                // Iterate through each child of "users"
+                for (DataSnapshot userChild : snapshot.getChildren()) {
+                    // Check if the child is "shelter" or "user_account"
+                    if (userChild.getKey().equals("shelter") || userChild.getKey().equals("user_account")) {
+                        // Iterate through each account under "shelter" or "user_account"
+                        for (DataSnapshot accountSnapshot : userChild.getChildren()) {
+                            // Get the "images" node under each account
+                            DataSnapshot imagesNode = accountSnapshot.child("images");
+                            // Iterate through each image under the "images" node
+                            for (DataSnapshot imageSnapshot : imagesNode.getChildren()) {
+                                String imageUrl = imageSnapshot.child("imageURL").getValue(String.class);
+                                String caption = imageSnapshot.child("caption").getValue(String.class);
+                                String contact = imageSnapshot.child("contact").getValue(String.class);
+                                String status = imageSnapshot.child("status").getValue(String.class);
+                                // Create DataClass object for each image
+                                DataClass dataClass = new DataClass(imageUrl, caption, contact,status);
+                                dataList.add(dataClass);
+                            }
+                        }
                     }
                 }
 

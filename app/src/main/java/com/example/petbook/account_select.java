@@ -22,7 +22,7 @@ public class account_select extends AppCompatActivity {
         shelteracc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_select.this, login_acc.class);
+                Intent intent = new Intent(account_select.this, shelter_login.class);
                 intent.putExtra("name", "Shelter");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

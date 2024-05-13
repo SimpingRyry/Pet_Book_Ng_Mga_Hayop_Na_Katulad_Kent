@@ -29,7 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class signup extends AppCompatActivity {
+public class shelter_signup extends AppCompatActivity {
     EditText signup_email,name,username,password,address;
     TextView signin_redirect, addimagetext;
     ImageButton signup;
@@ -45,7 +45,7 @@ public class signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String data = intent.getStringExtra("key");
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_shelter_signup);
 
         signup_email = findViewById(R.id.email);
         name = findViewById(R.id.name);
@@ -72,7 +72,7 @@ public class signup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 database = FirebaseDatabase.getInstance();
-                databaseReference = database.getReference("users").child("user_account");
+                databaseReference = database.getReference("users").child("shelter");
 
                 String email = signup_email.getText().toString();
                 String signup_name = name.getText().toString();
@@ -86,9 +86,9 @@ public class signup extends AppCompatActivity {
                 helperclass helperclass = new helperclass(signup_username,email,signup_pass,signup_address,signup_name,encodedImage);
                 databaseReference.child(signup_username).setValue(helperclass);
                 Log.d("toast", "success");
-                Toast.makeText(com.example.petbook.signup.this, "Sign Up Successful", Toast.LENGTH_SHORT);
+                Toast.makeText(com.example.petbook.shelter_signup.this, "Sign Up Successful", Toast.LENGTH_SHORT);
 
-                Intent intent = new Intent(signup.this, login_acc.class);
+                Intent intent = new Intent(com.example.petbook.shelter_signup.this, shelter_login.class);
                 intent.putExtra("name", data);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -100,7 +100,7 @@ public class signup extends AppCompatActivity {
         signin_redirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), login_acc.class));
+                startActivity(new Intent(getApplicationContext(), shelter_login.class));
                 overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 finish();
             }

@@ -10,15 +10,24 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Petbook"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".UploadDonations"
+            android:exported="false" />
+        <activity
+            android:name=".shelter_signup"
+            android:exported="false" />
+        <activity
+            android:name=".shelter_login"
+            android:exported="false" />
         <activity
             android:name=".chat2"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Load_users"
             android:exported="false" />

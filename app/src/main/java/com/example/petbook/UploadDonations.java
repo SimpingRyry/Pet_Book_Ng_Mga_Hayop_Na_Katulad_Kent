@@ -35,12 +35,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class UploadPetImage extends AppCompatActivity {
+public class UploadDonations extends AppCompatActivity {
 
     private Button uploadButton;
     private ImageView uploadImage;
     EditText uploadCaption;
     EditText contact;
+    EditText description;
     ProgressBar progressBar;
     Spinner spinner;
     String status;
@@ -53,36 +54,16 @@ public class UploadPetImage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_pet_image);
+        setContentView(R.layout.activity_upload_donations);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         uploadButton = findViewById(R.id.uploadButton);
         uploadCaption = findViewById(R.id.petname);
         contact = findViewById(R.id.contact);
+        description = findViewById(R.id.descriptiondonate);
         uploadImage = findViewById(R.id.uploadImage);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-        spinner = findViewById(R.id.lnf);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.spinner_items,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                status = parent.getItemAtPosition(position).toString();
-                // Do something with the selected item
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do something when nothing is selected
-            }
-        });
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -94,7 +75,7 @@ public class UploadPetImage extends AppCompatActivity {
                             imageUri = data.getData();
                             uploadImage.setImageURI(imageUri);
                         } else {
-                            Toast.makeText(UploadPetImage.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadDonations.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -117,10 +98,11 @@ public class UploadPetImage extends AppCompatActivity {
             public void onClick(View view) {
                 String caption = uploadCaption.getText().toString();
                 String contactnum = contact.getText().toString();
-                if (imageUri != null && caption != null && contactnum != null && status != null ){
+                String descriptiontext = description.getText().toString();
+                if (imageUri != null && caption != null && contactnum != null && descriptiontext != null ){
                     uploadToFirebase(imageUri);
                 } else  {
-                    Toast.makeText(UploadPetImage.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UploadDonations.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -129,6 +111,7 @@ public class UploadPetImage extends AppCompatActivity {
     private void uploadToFirebase(Uri uri){
         String caption = uploadCaption.getText().toString();
         String contactnum = contact.getText().toString();
+        String descriptiontext = description.getText().toString();
         final StorageReference imageReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         imageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -136,12 +119,12 @@ public class UploadPetImage extends AppCompatActivity {
                 imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        DataClass dataClass = new DataClass(uri.toString(), caption,contactnum,status);
+                        DonationsDataClass dataClass = new DonationsDataClass(uri.toString(), caption,contactnum,descriptiontext);
                         String key = databaseReference.push().getKey();
-                        databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("loggedInUser", "")).child("images").child(key).setValue(dataClass);
+                        databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("loggedInUser", "")).child("donations").child(key).setValue(dataClass);
                         progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(UploadPetImage.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(UploadPetImage.this, MainActivity.class);
+                        Toast.makeText(UploadDonations.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(UploadDonations.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -156,7 +139,7 @@ public class UploadPetImage extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(UploadPetImage.this, "Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadDonations.this, "Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }

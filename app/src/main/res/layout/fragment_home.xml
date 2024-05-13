@@ -109,39 +109,12 @@
                         android:textColor="@color/white"/>
 
                     <!-- First Horizontal ScrollView with LinearLayout inside -->
-                    <HorizontalScrollView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/shelterrecycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none" >
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <!-- Additional views can be added here -->
-                            <ImageView
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/nearshelter1"
-                                android:layout_marginStart="10dp"/>
-
-                            <ImageView
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/nearshelter2"
-                                android:layout_marginStart="10dp" />
-
-                            <ImageView
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
-                                android:src="@drawable/nearshelter1"
-                                android:layout_marginStart="10dp"/>
-
-                            <!-- Add more images or views here -->
-
-                        </LinearLayout>
-                    </HorizontalScrollView>
+                        android:orientation="horizontal"
+                        android:padding="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"

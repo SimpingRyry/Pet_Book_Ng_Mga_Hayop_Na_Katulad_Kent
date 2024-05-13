@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements LostAndFoundFragment.OnButton1ClickListener {
+public class MainActivity extends AppCompatActivity implements LostAndFoundFragment.OnButton1ClickListener,DonationsAdapter.OnButtonClickListener{
     String SECRET_KEY = "sk_test_51PFSUlAj3m1FbFF3DFbkUifQl1vQSVGMg2AVRrY3Yd14JAGaE5pFSQFKm36Po02vtENJyYvddsT0ctBlKIn8CMwe00pUU1m63p";
     String PUBLISH_KEY = "pk_test_51PFSUlAj3m1FbFF3kXjFCtmENiu9tQTngjmVPrvq5rNGoN3FwUIQAUIru8vLgf84qeVWgh5vSu9SFkyH04uYDXUP00sVb4JUiI"; PaymentSheet paymentsheet;
     String customerID;
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
         RequestQueue requestQueue =  Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-    private  void paymentFlow(){
+    public  void paymentFlow(){
         paymentsheet.presentWithPaymentIntent(ClientSecret,new PaymentSheet.Configuration("ABC Company",new PaymentSheet.CustomerConfiguration(
                 customerID,
                 EphericalKey
@@ -231,5 +231,10 @@ public class MainActivity extends AppCompatActivity implements LostAndFoundFragm
         if (paymentSheetResult instanceof PaymentSheetResult.Completed){
             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onButtonClick(int position) {
+        paymentFlow();
     }
 }

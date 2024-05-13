@@ -9,7 +9,7 @@
     android:background="#add7b1"
     android:paddingTop="30dp"
     android:gravity="center"
-    tools:context=".UploadPetImage">
+    tools:context=".UploadDonations">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,10 +62,17 @@
                 android:background="@android:color/white"
                 android:padding="10dp"
                 android:hint="Contact..."/>
-            <Spinner
-                android:id="@+id/lnf"
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
+                android:layout_height="150dp"
+                android:id="@+id/descriptiondonate"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:hint="Description..."/>
+
 
             <Button
                 android:layout_width="wrap_content"
@@ -76,15 +83,15 @@
                 android:text="UPLOAD"/>
 
 
-<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:id="@+id/uploadButton"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:backgroundTint="#fdb69a"-->
-<!--                android:src="@drawable/kanarrow"-->
-<!--                app:tint="@color/white"-->
-<!--                app:maxImageSize="40dp"/>-->
+            <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:id="@+id/uploadButton"-->
+            <!--                android:layout_marginStart="10dp"-->
+            <!--                android:backgroundTint="#fdb69a"-->
+            <!--                android:src="@drawable/kanarrow"-->
+            <!--                app:tint="@color/white"-->
+            <!--                app:maxImageSize="40dp"/>-->
 
         </LinearLayout>
 

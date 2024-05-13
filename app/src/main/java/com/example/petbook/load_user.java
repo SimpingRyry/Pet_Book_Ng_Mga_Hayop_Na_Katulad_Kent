@@ -47,8 +47,13 @@ public class load_user extends Fragment implements UserListerner {
         userrecycler = rootview.findViewById(R.id.rv1);
 
         GetUsers(pbar,userrecycler);
+        GetUsers2(pbar,userrecycler);
 
         return rootview;
+
+    }
+
+    private void GetUsers2(ProgressBar pbar, RecyclerView userrecycler) {
 
     }
 
@@ -63,30 +68,56 @@ public class load_user extends Fragment implements UserListerner {
 
     private void GetUsers(ProgressBar pbar, RecyclerView userrecycler) {
         loading(pbar, true);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        reference.orderByChild("username").addListenerForSingleValueEvent(new ValueEventListener() {
+        final boolean[] userReferenceDataLoaded = {false}; // Using an array to hold boolean value
+        final boolean[] shelterDataLoaded = {false};
+        DatabaseReference userreference = FirebaseDatabase.getInstance().getReference("users").child("user_account");
+        DatabaseReference shelterreference = FirebaseDatabase.getInstance().getReference("users").child("shelter");
+
+        // Combining data from both queries
+        List<User> users = new ArrayList<>();
+
+        userreference.orderByChild("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                loading(pbar, false);
-                List<User> users = new ArrayList<>();
+                userReferenceDataLoaded[0] = false; // Marking user account data as loaded
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Convert DataSnapshot to User object
                     User user = new User();
                     user.name = snapshot.child("name").getValue(String.class);
                     user.email = snapshot.child("email").getValue(String.class);
-
                     user.image = snapshot.child("image").getValue(String.class);
                     user.id = snapshot.getKey();
                     users.add(user);
                 }
+                // Check if both queries are completed
+                if (users.size() != 0 && !shelterDataLoaded[0]) {
+                    loading(pbar, false);
+                    setUserAdapter(users, userrecycler);
+                }
+            }
 
-                if (users.size() != 0) {
-                    UserAdapters userAdapters = new UserAdapters(users,load_user.this::OnUserClicked);
-                    userrecycler.setAdapter(userAdapters);
-                    userrecycler.setVisibility(View.VISIBLE);
-                } else {
-                    // Display a toast message if no users found
-                    Toast.makeText(getContext(), "No users found", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle onCancelled event
+            }
+        });
+
+        shelterreference.orderByChild("username").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                shelterDataLoaded[0] = false; // Flag to indicate shelter data loaded
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = new User();
+                    user.name = snapshot.child("name").getValue(String.class);
+                    user.email = snapshot.child("email").getValue(String.class);
+                    user.image = snapshot.child("image").getValue(String.class);
+                    user.id = snapshot.getKey();
+                    users.add(user);
+                }
+                // Check if both queries are completed
+                if (users.size() != 0 && !userReferenceDataLoaded[0]) {
+                    loading(pbar, false);
+                    setUserAdapter(users, userrecycler);
                 }
             }
 
@@ -97,6 +128,8 @@ public class load_user extends Fragment implements UserListerner {
         });
     }
 
+
+
     @Override
     public void OnUserClicked(User user) {
         Intent intent = new Intent(getActivity(), chat2.class);
@@ -104,6 +137,15 @@ public class load_user extends Fragment implements UserListerner {
         startActivity(intent);
 
     }
+
+    private void setUserAdapter(List<User> users, RecyclerView userrecycler) {
+        UserAdapters userAdapters = new UserAdapters(users, load_user.this::OnUserClicked);
+        userrecycler.setAdapter(userAdapters);
+        userrecycler.setVisibility(View.VISIBLE);
+    }
+
+
+
 }
 
 
