@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -106,28 +108,11 @@ public class LostAndFoundFragment extends Fragment {
 
         fab = view.findViewById(R.id.fab);
         recyclerView = view.findViewById(R.id.recyclerView);
-        lostbtn = view.findViewById(R.id.btnlost);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dataList = new ArrayList<>();
         adapter = new LostAndFoundAdapter(getContext(), dataList);
         recyclerView.setAdapter(adapter);
-
-
-
-        lostbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    mListener.onButton1Click();
-            }
-        });
-
-
-
-
-
-
-
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
@@ -166,6 +151,16 @@ public class LostAndFoundFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle possible errors
+            }
+        });
+
+        roundedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.mainlayout, new ProfileFragment());
+                transaction.commit();
             }
         });
 

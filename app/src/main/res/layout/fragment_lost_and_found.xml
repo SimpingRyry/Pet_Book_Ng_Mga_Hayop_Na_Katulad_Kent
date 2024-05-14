@@ -16,7 +16,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/upperCardView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             app:cardBackgroundColor="#7e9684">
 
@@ -31,18 +31,32 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:fontFamily="monospace"
-                    android:text="Search for your Lost Pets"
+                    android:textColor="@color/white"
+                    android:text="Lost and Found:"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/title_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="monospace"
+                    android:layout_below="@+id/title_text"
+                    android:text="Missing and found pets"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/top_bar_image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/background_icon"
                     app:riv_oval="true"
-                    android:layout_alignParentEnd="true"
-                    />
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="4dp"
+                    android:layout_alignParentEnd="true" />
 
                 <!-- Search Bar inside CardView -->
                 <androidx.cardview.widget.CardView
@@ -53,20 +67,7 @@
                     android:layout_marginTop="30dp"
                     app:cardBackgroundColor="#FFFFFF"
                     app:cardElevation="4dp"
-                    app:cardCornerRadius="8dp">
-
-                    <EditText
-                        android:id="@+id/search_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Search"
-                        android:padding="8dp"
-                        android:background="@android:color/transparent"
-                        android:drawableStart="@drawable/ico_search"
-                        android:drawablePadding="8dp"
-                        android:inputType="text" />
-
-                </androidx.cardview.widget.CardView>
+                    app:cardCornerRadius="8dp"/>
 
             </RelativeLayout>
 
@@ -92,24 +93,7 @@
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lost"
-                        android:id="@+id/btnlost"
-                        android:background="@drawable/rounded_button_left"/>
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Found"
-                        android:background="@drawable/rounded_button_righ" />
-
-                </LinearLayout>
+                    android:layout_marginTop="16dp"/>
 
                 <!-- ScrollView with LinearLayout inside -->
                 <ScrollView
@@ -143,7 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/plus_btn"
+        android:src="@drawable/baseline_add_24"
         android:backgroundTint="#7E9684"/>
 
 </FrameLayout>

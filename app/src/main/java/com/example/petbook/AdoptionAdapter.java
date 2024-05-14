@@ -53,6 +53,6 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
             staggeredCaption = itemView.findViewById(R.id.staggeredCaption);
             staggeredContact = itemView.findViewById(R.id.staggeredContact);
             staggeredStatus = itemView.findViewById(R.id.staggeredStatus);
-    }
+        }
     }
 }

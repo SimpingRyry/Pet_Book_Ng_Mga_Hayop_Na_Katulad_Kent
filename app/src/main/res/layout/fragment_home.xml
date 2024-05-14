@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/homeFrag"
     android:background="#7e9684"
     tools:context=".HomeFragment">
 
@@ -16,7 +17,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/upperCardView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             app:cardBackgroundColor="#7e9684">
 
@@ -50,12 +51,14 @@
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/top_bar_image"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/background_icon"
+                    android:onClick="profile"
                     app:riv_oval="true"
-                    android:layout_alignParentEnd="true"
-               />
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="4dp"
+                    android:layout_alignParentEnd="true" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/search_card"
@@ -65,20 +68,7 @@
                     android:layout_marginTop="50dp"
                     app:cardBackgroundColor="#FFFFFF"
                     app:cardElevation="4dp"
-                    app:cardCornerRadius="8dp">
-
-                    <EditText
-                        android:id="@+id/search_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Search"
-                        android:padding="8dp"
-                        android:background="@android:color/transparent"
-                        android:drawableStart="@drawable/ico_search"
-                        android:drawablePadding="8dp"
-                        android:inputType="text" />
-
-                </androidx.cardview.widget.CardView>
+                    app:cardCornerRadius="8dp"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
@@ -127,7 +117,6 @@
                         android:fontFamily="monospace"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="10dp"
                         android:textColor="@color/white"/>
 
                     <!-- Second Horizontal ScrollView with LinearLayout inside -->
@@ -146,8 +135,8 @@
                         android:fontFamily="monospace"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="10dp"
                         android:textColor="@color/white"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/adoptionRecycler"
                         android:layout_width="match_parent"
@@ -167,6 +156,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/plus_btn"
+        android:src="@drawable/baseline_add_24"
         android:backgroundTint="#7E9684"/>
 </FrameLayout>

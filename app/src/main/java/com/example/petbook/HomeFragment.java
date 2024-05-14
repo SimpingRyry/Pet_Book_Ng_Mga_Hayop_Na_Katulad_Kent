@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -19,6 +21,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +34,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    private RecyclerView recyclerView, recyclerView1,shelterpets;
+    private RecyclerView recyclerView, recyclerView1, shelterpets;
     private ArrayList<shelterDataClass> dataList;
     private ArrayList<DataClass> dataList1;
     private ArrayList<AdoptionDataClass> dataList2;
@@ -44,6 +47,8 @@ public class HomeFragment extends Fragment {
     private DatabaseReference databaseReference, databaseReference1;
     private SharedPreferences preferences;
     RoundedImageView roundedImageView;
+
+    ImageView profile;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -199,6 +204,16 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        profile = view.findViewById(R.id.profile);
+        roundedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.mainlayout, new ProfileFragment());
+                transaction.commit();
+            }
+        });
     }
 
 }

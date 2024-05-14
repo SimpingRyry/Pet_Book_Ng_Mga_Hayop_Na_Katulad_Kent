@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,13 +71,15 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
         adapter = new DonationsAdapter(getContext(), dataList, (DonationsAdapter.OnButtonClickListener) getActivity()); // Pass getActivity() as the third parameter
         recyclerView.setAdapter(adapter);
 
-
-
-
-
-
-
-
+        roundedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.mainlayout, new ProfileFragment());
+                transaction.commit();
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
