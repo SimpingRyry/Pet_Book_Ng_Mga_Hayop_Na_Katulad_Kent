@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<shelterDataClass> dataList;
     private ArrayList<DataClass> dataList1;
     private ArrayList<AdoptionDataClass> dataList2;
+    private ArrayList<AdoptionDataClass> dataList3;
     private ShelterAdapter adapter;
     private AdoptionAdapter adapter1;
     private AdoptionAdapter2 adapter2;
@@ -96,8 +97,8 @@ public class HomeFragment extends Fragment {
         shelterpets = view.findViewById(R.id.shelterpets);
         shelterpets.setHasFixedSize(true);
         shelterpets.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        dataList2 = new ArrayList<>();
-        adapter2 = new AdoptionAdapter2(dataList2,getContext());
+        dataList3 = new ArrayList<>();
+        adapter2 = new AdoptionAdapter2(dataList3,getContext());
         shelterpets.setAdapter(adapter2);
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         fab.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +135,7 @@ public class HomeFragment extends Fragment {
                                 String owner = imageSnapshot.child("owner").getValue(String.class);
                                 // Create DataClass object for each image
                                 AdoptionDataClass dataClass = new AdoptionDataClass(imageUrl, caption, petage,contact,owner);
-                                dataList2.add(dataClass);
+                                dataList3.add(dataClass);
                             }
 
 
@@ -156,7 +157,7 @@ public class HomeFragment extends Fragment {
         recyclerView1 = view.findViewById(R.id.adoptionRecycler);
         recyclerView1.setHasFixedSize(true);
         recyclerView1.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        dataList1 = new ArrayList<>();
+        dataList2 = new ArrayList<>();
         adapter1 = new AdoptionAdapter(dataList2, getContext());
         recyclerView1.setAdapter(adapter1);
 
