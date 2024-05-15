@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -38,7 +40,7 @@ import com.google.firebase.storage.UploadTask;
 public class UploadAdoption extends AppCompatActivity {
 
     private Button uploadButton;
-    private ImageView uploadImage;
+    private ImageView uploadImage, back;
     EditText uploadCaption;
     EditText contact;
     EditText description,petage;
@@ -61,6 +63,7 @@ public class UploadAdoption extends AppCompatActivity {
         uploadCaption = findViewById(R.id.petname);
         petage = findViewById(R.id.age);
         contact = findViewById(R.id.adoptioncontact);
+        back = findViewById(R.id.back);
 
         uploadImage = findViewById(R.id.uploadImage);
         progressBar = findViewById(R.id.progressBar);
@@ -81,7 +84,28 @@ public class UploadAdoption extends AppCompatActivity {
                     }
                 }
         );
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//                // Begin FragmentTransaction
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                // Replace or Add Fragment
+//                HomeFragment fragment = new HomeFragment(); // Initialize your Fragment instance
+//                fragmentTransaction.replace(R.id.mainlayout, fragment); // Use replace() if you want to replace existing fragment, use add() if you want to add it to existing fragments
+//
+//                // Add to Back Stack (Optional)
+//                fragmentTransaction.addToBackStack(null); // You can provide a tag for identification
+//
+//                // Commit Transaction
+//                fragmentTransaction.commit();\
 
+                Intent intent = new Intent(UploadAdoption.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         uploadImage.setOnClickListener(new View.OnClickListener() {

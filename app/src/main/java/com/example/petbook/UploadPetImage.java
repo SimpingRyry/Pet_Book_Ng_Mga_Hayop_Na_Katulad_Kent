@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -38,7 +40,9 @@ import com.google.firebase.storage.UploadTask;
 public class UploadPetImage extends AppCompatActivity {
 
     private Button uploadButton;
-    private ImageView uploadImage;
+    private ImageView uploadImage,back;
+
+
     EditText uploadCaption;
     EditText contact;
     ProgressBar progressBar;
@@ -60,6 +64,7 @@ public class UploadPetImage extends AppCompatActivity {
         uploadCaption = findViewById(R.id.petname);
         contact = findViewById(R.id.contact);
         uploadImage = findViewById(R.id.uploadImage);
+        back = findViewById(R.id.back);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         spinner = findViewById(R.id.lnf);
@@ -100,7 +105,27 @@ public class UploadPetImage extends AppCompatActivity {
                 }
         );
 
-
+back.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//        // Begin FragmentTransaction
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        // Replace or Add Fragment
+//        LostAndFoundFragment fragment = new LostAndFoundFragment(); // Initialize your Fragment instance
+//        fragmentTransaction.replace(R.id.mainlayout, fragment); // Use replace() if you want to replace existing fragment, use add() if you want to add it to existing fragments
+//
+//        // Add to Back Stack (Optional)
+//        fragmentTransaction.addToBackStack(null); // You can provide a tag for identification
+//
+//        // Commit Transaction
+//        fragmentTransaction.commit();
+        Intent intent = new Intent(UploadPetImage.this,MainActivity.class);
+        startActivity(intent);
+    }
+});
 
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override

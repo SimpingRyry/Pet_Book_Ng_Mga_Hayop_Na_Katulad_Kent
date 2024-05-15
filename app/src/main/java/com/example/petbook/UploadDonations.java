@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -38,7 +40,7 @@ import com.google.firebase.storage.UploadTask;
 public class UploadDonations extends AppCompatActivity {
 
     private Button uploadButton;
-    private ImageView uploadImage;
+    private ImageView uploadImage, back;
     EditText uploadCaption;
     EditText contact;
     EditText description;
@@ -63,6 +65,7 @@ public class UploadDonations extends AppCompatActivity {
         description = findViewById(R.id.descriptiondonate);
         uploadImage = findViewById(R.id.uploadImage);
         progressBar = findViewById(R.id.progressBar);
+        back = findViewById(R.id.back);
         progressBar.setVisibility(View.INVISIBLE);
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -80,6 +83,28 @@ public class UploadDonations extends AppCompatActivity {
                     }
                 }
         );
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//
+//                // Begin FragmentTransaction
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                // Replace or Add Fragment
+//                DonationFragment fragment = new DonationFragment(); // Initialize your Fragment instance
+//                fragmentTransaction.replace(R.id.mainlayout, fragment); // Use replace() if you want to replace existing fragment, use add() if you want to add it to existing fragments
+//
+//                // Add to Back Stack (Optional)
+//                fragmentTransaction.addToBackStack(null); // You can provide a tag for identification
+//
+//                // Commit Transaction
+//                fragmentTransaction.commit();
+                Intent intent = new Intent(UploadDonations.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 
