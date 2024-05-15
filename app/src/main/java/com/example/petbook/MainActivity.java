@@ -54,6 +54,14 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
                 OnPaymentResult(paymentSheetResult);
         });
 
+        if (NetworkUtils.isInternetConnected(getApplicationContext())) {
+
+            // Device is connected to the internet
+        } else {
+            Toast.makeText(MainActivity.this,"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+            // Device is not connected to the internet
+        }
+
 
 
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,9 +60,16 @@ public class login_acc extends AppCompatActivity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validateUsername() && validatePassword()){
-                    checkUser(data);
+                if (NetworkUtils.isInternetConnected(getApplicationContext())) {
+                    if (validateUsername() && validatePassword()){
+                        checkUser(data);
+                    }
+                    // Device is connected to the internet
+                } else {
+                    Toast.makeText(login_acc.this,"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+                    // Device is not connected to the internet
                 }
+
 
 
 

@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +59,13 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
         byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
         roundedImageView.setImageBitmap(bitmap);
+        if (NetworkUtils.isInternetConnected(getContext())) {
+
+            // Device is connected to the internet
+        } else {
+            Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+            // Device is not connected to the internet
+        }
 
 
 

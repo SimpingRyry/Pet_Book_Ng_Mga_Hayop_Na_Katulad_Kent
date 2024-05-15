@@ -48,6 +48,14 @@ public class load_user extends Fragment implements UserListerner {
 
         GetUsers(pbar,userrecycler);
         GetUsers2(pbar,userrecycler);
+        if (NetworkUtils.isInternetConnected(getContext())) {
+
+            // Device is connected to the internet
+        } else {
+            Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+            // Device is not connected to the internet
+        }
+
 
         return rootview;
 

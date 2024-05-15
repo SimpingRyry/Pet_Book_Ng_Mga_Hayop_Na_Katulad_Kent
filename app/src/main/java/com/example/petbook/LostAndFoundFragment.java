@@ -104,6 +104,14 @@ public class LostAndFoundFragment extends Fragment {
         byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
         roundedImageView.setImageBitmap(bitmap);
+        if (NetworkUtils.isInternetConnected(getContext())) {
+
+            // Device is connected to the internet
+        } else {
+            Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+            // Device is not connected to the internet
+        }
+
 
 
         fab = view.findViewById(R.id.fab);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -81,6 +82,13 @@ public class MessagesFragment extends Fragment implements ConversationListener {
         listenConvo(loggedInUser,listenmessages(pbar,convorecycler));
 
         floatingActionButton = rootview.findViewById(R.id.floatingActionButton);
+        if (NetworkUtils.isInternetConnected(getContext())) {
+
+            // Device is connected to the internet
+        } else {
+            Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+            // Device is not connected to the internet
+        }
 
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
