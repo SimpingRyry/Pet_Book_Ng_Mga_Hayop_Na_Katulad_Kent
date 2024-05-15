@@ -198,4 +198,10 @@ back.setOnClickListener(new View.OnClickListener() {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(fileUri));
     }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+
+    }
 }

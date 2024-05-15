@@ -181,4 +181,9 @@ public class UploadDonations extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(fileUri));
     }
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+
+    }
 }

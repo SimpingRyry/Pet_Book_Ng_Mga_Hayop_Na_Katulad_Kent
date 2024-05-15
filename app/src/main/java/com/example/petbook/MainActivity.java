@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
     String EphericalKey;
     String ClientSecret;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,6 +242,12 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
             fetchapi();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+
     }
 
     @Override

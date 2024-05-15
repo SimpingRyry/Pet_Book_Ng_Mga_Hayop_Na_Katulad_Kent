@@ -1,6 +1,8 @@
 package com.example.petbook;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -104,37 +106,34 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         lalabasanNa = view.findViewById(R.id.lalabasan);
         lalabasanNa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove("loggedInUser");
-                editor.remove("userprof");
-                editor.remove("name");
-                editor.remove("account_type");
-                editor.remove("address");
-                editor.remove("email");
-                editor.apply();
-                Intent intent = new Intent(getActivity(), account_select.class);
-                startActivity(intent);
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User clicked "Yes" button, proceed with logout
+                                preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.remove("loggedInUser");
+                                editor.remove("userprof");
+                                editor.remove("name");
+                                editor.remove("account_type");
+                                editor.remove("address");
+                                editor.remove("email");
+                                editor.apply();
+                                Intent intent = new Intent(getActivity(), account_select.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null) // User clicked "No" button, do nothing
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
-
 
     }
 }

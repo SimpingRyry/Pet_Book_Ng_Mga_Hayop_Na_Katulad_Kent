@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
     android:background="@color/camo_green"
     tools:context=".chat2">
-
 
     <View
         android:id="@+id/vbg"
@@ -32,41 +32,28 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
+        android:onClick="goBack"
         android:padding="5dp"
         android:src="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!--    <androidx.appcompat.widget.AppCompatImageView-->
-    <!--        android:layout_width="30dp"-->
-    <!--        android:layout_height="30dp"-->
-    <!--        android:id="@+id/imageback"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginLeft="16dp"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:padding="5dp"-->
-    <!--        android:src="@drawable/back"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"/>-->
-
-
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="50dp"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
         android:id="@+id/textname2"
-
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageback"
         app:layout_constraintStart_toEndOf="@id/imageback"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageback"/>
+        app:layout_constraintTop_toTopOf="parent"/>
     
     <View
         android:layout_width="match_parent"
@@ -98,18 +85,6 @@
         app:layout_constraintStart_toStartOf="@id/vbg"
         app:layout_constraintTop_toTopOf="@id/vbg"/>
 
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- TODO: Update blank fragment layout -->
     <FrameLayout
         android:id="@+id/layout_Send"
@@ -129,8 +104,6 @@
             android:layout_marginLeft="4dp"
             android:padding="8dp"
             android:src="@drawable/send"/>
-
-
 
     </FrameLayout>
 
@@ -155,17 +128,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/layout_Send"
         app:layout_constraintStart_toStartOf="parent"/>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

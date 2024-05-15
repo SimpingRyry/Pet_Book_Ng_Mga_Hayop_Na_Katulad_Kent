@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -48,8 +50,6 @@ public class chat2 extends AppCompatActivity {
     FirebaseAuth mAuth ;
     private List<ChatMessage> chatMessages;
     private SharedPreferences preferences;
-
-
 
 
     String conversationid = null;
@@ -276,10 +276,27 @@ public class chat2 extends AppCompatActivity {
 
     private void setListeners(){
         binding.imageback.setOnClickListener(view -> onBackPressed());
-        binding.layoutSend.setOnClickListener(view -> sendMessage());}
+
+
+        binding.layoutSend.setOnClickListener(view -> {
+            // Add your condition here
+            String message = binding.inputMessage.getText().toString().trim();
+
+            if (message.isEmpty()) {
+                Log.d("Test",binding.inputMessage.getText().toString() );
+
+            } else {
+                // Optionally, show a message or do something if the condition is not met
+                sendMessage();
+            }
+        });
+
+    }
 
     private void sendMessage(){
+
         if (conversationid != null){
+
             updateMessages(binding.inputMessage.getText().toString());
         }
         else {
@@ -420,4 +437,8 @@ public class chat2 extends AppCompatActivity {
         binding.inputMessage.setText(null);
     }
 
+
+    public void goBack(View view) {
+        finish();
+    }
 }
