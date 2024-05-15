@@ -153,9 +153,9 @@ public class UploadAdoption extends AppCompatActivity {
                 imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        AdoptionDataClass dataClass = new AdoptionDataClass(uri.toString(), caption,pet_age,contactnum,preferences.getString("loggedInUser", ""));
+                        AdoptionDataClass dataClass = new AdoptionDataClass(uri.toString(), caption,pet_age,contactnum,preferences.getString("name", ""));
                         String key = databaseReference.push().getKey();
-                        databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("name", "")).child("adoptions").child(key).setValue(dataClass);
+                        databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("loggedInUser", "")).child("adoptions").child(key).setValue(dataClass);
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(UploadAdoption.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UploadAdoption.this, MainActivity.class);
