@@ -142,11 +142,19 @@ back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String caption = uploadCaption.getText().toString();
                 String contactnum = contact.getText().toString();
-                if (imageUri != null && caption != null && contactnum != null && status != null ){
-                    uploadToFirebase(imageUri);
-                } else  {
-                    Toast.makeText(UploadPetImage.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                if (NetworkUtils.isInternetConnected(getApplicationContext())) {
+                    if (imageUri != null && caption != null && contactnum != null && status != null ){
+                        uploadToFirebase(imageUri);
+                    } else  {
+                        Toast.makeText(UploadPetImage.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    }
+                    // Device is connected to the internet
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+                    // Device is not connected to the internet
                 }
+
+
             }
         });
     }

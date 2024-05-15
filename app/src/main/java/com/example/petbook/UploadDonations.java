@@ -124,11 +124,19 @@ public class UploadDonations extends AppCompatActivity {
                 String caption = uploadCaption.getText().toString();
                 String contactnum = contact.getText().toString();
                 String descriptiontext = description.getText().toString();
-                if (imageUri != null && caption != null && contactnum != null && descriptiontext != null ){
-                    uploadToFirebase(imageUri);
-                } else  {
-                    Toast.makeText(UploadDonations.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                if (NetworkUtils.isInternetConnected(getApplicationContext())) {
+                    if (imageUri != null && caption != null && contactnum != null && descriptiontext != null ){
+                        uploadToFirebase(imageUri);
+                    } else  {
+                        Toast.makeText(UploadDonations.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    }
+                    // Device is connected to the internet
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
+                    // Device is not connected to the internet
                 }
+
+
             }
         });
     }
