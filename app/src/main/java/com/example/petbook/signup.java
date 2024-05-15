@@ -83,15 +83,23 @@ public class signup extends AppCompatActivity {
 
                 String signup_address = address.getText().toString();
 
-                helperclass helperclass = new helperclass(signup_username,email,signup_pass,signup_address,signup_name,encodedImage);
-                databaseReference.child(signup_username).setValue(helperclass);
-                Log.d("toast", "success");
-                Toast.makeText(com.example.petbook.signup.this, "Sign Up Successful", Toast.LENGTH_SHORT);
+                if(email != null && signup_name != null && signup_username != null && signup_pass != null && signup_address != null && encodedImage != null){
+                    helperclass helperclass = new helperclass(signup_username,email,signup_pass,signup_address,signup_name,encodedImage);
+                    databaseReference.child(signup_username).setValue(helperclass);
+                    Log.d("toast", "success");
+                    Toast.makeText(com.example.petbook.signup.this, "Sign Up Successful", Toast.LENGTH_SHORT);
 
-                Intent intent = new Intent(signup.this, login_acc.class);
-                intent.putExtra("name", data);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    Intent intent = new Intent(signup.this, login_acc.class);
+                    intent.putExtra("name", data);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+                }
+
+                else {
+                    Toast.makeText(com.example.petbook.signup.this, "Please fill up required fields", Toast.LENGTH_SHORT);
+                }
+
 
 
 
