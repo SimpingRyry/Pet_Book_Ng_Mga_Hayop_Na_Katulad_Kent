@@ -131,6 +131,7 @@ public class LostAndFoundFragment extends Fragment {
                         for (DataSnapshot accountSnapshot : userChild.getChildren()) {
                             // Get the "images" node under each account
                             DataSnapshot imagesNode = accountSnapshot.child("images");
+                            String image = accountSnapshot.child("image").getValue(String.class);
                             // Iterate through each image under the "images" node
                             for (DataSnapshot imageSnapshot : imagesNode.getChildren()) {
                                 String imageUrl = imageSnapshot.child("imageURL").getValue(String.class);
@@ -139,6 +140,7 @@ public class LostAndFoundFragment extends Fragment {
                                 String status = imageSnapshot.child("status").getValue(String.class);
                                 // Create DataClass object for each image
                                 DataClass dataClass = new DataClass(imageUrl, caption, contact,status);
+                                dataClass.setProfimage(image);
                                 dataList.add(dataClass);
                             }
                         }

@@ -1,6 +1,6 @@
 package com.example.petbook;
 public class DataClass {
-    private String imageURL, caption, contact,status;
+    private String imageURL, caption, contact,status,profimage;
 
 
 
@@ -30,6 +30,14 @@ public class DataClass {
         this.status = status;
     }
 
+    public String getProfimage() {
+        return profimage;
+    }
+
+    public void setProfimage(String profimage) {
+        this.profimage = profimage;
+    }
+
     public void setContact(String contact) {
         this.contact = contact;
     }
@@ -38,5 +46,6 @@ public class DataClass {
         this.caption = caption;
         this.contact = contact;
         this.status = status;
+
     }
 }

@@ -1,11 +1,16 @@
 package com.example.petbook;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.makeramen.roundedimageview.RoundedImageView;
+
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +33,7 @@ public class LostAndFoundAdapter extends RecyclerView.Adapter<LostAndFoundAdapte
         holder.recyclerCaption.setText(dataList.get(position).getCaption());
         holder.recyclercontact.setText(dataList.get(position).getContact());
         holder.recyclerstatus.setText(dataList.get(position).getStatus());
+        holder.userprof.setImageBitmap(getUserImage(dataList.get(position).getProfimage()));
     }
 
     @Override
@@ -39,12 +45,18 @@ public class LostAndFoundAdapter extends RecyclerView.Adapter<LostAndFoundAdapte
         TextView recyclerCaption;
         TextView recyclercontact;
         TextView recyclerstatus;
+        RoundedImageView userprof;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerImage = itemView.findViewById(R.id.recyclerImage);
             recyclerCaption = itemView.findViewById(R.id.recyclerCaption);
             recyclercontact = itemView.findViewById(R.id.recyclercontact);
             recyclerstatus = itemView.findViewById(R.id.recyclerstatus);
+            userprof = itemView.findViewById(R.id.userprof);
         }
+    }
+    private Bitmap getUserImage(String encodedImage) {
+        byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }
