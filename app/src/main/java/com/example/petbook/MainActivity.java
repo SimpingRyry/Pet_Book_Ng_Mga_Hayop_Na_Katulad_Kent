@@ -49,10 +49,50 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
         FrameLayout framelayout = findViewById(R.id.mainlayout);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         PaymentConfiguration.init(this,PUBLISH_KEY);
+        fetchapi();
         paymentsheet = new PaymentSheet(this, paymentSheetResult -> {
                 OnPaymentResult(paymentSheetResult);
         });
 
+
+
+
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                int itemID = menuItem.getItemId();
+
+                if (itemID == R.id.button_home) {
+                    loadFragment(new HomeFragment(), false);
+                } else if (itemID == R.id.button_donation) {
+                    loadFragment(new DonationFragment(), false);
+                } else if (itemID == R.id.button_lnf) {
+                    loadFragment(new LostAndFoundFragment(), false);
+                } else {
+                    loadFragment(new MessagesFragment(), false);
+                }
+
+                return true;
+            }
+        });
+        loadFragment(new HomeFragment(), true);
+    }
+
+    private void loadFragment(Fragment fragment, boolean isAppInitialized){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (isAppInitialized) {
+            fragmentTransaction.add(R.id.mainlayout, fragment);
+        } else {
+            fragmentTransaction.replace(R.id.mainlayout, fragment);
+        }
+        fragmentTransaction.commit();
+    }
+
+    private void fetchapi(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers", new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -92,40 +132,6 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
         requestQueue.add(stringRequest);
 
 
-
-
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                int itemID = menuItem.getItemId();
-
-                if (itemID == R.id.button_home) {
-                    loadFragment(new HomeFragment(), false);
-                } else if (itemID == R.id.button_donation) {
-                    loadFragment(new DonationFragment(), false);
-                } else if (itemID == R.id.button_lnf) {
-                    loadFragment(new LostAndFoundFragment(), false);
-                } else {
-                    loadFragment(new MessagesFragment(), false);
-                }
-
-                return true;
-            }
-        });
-        loadFragment(new HomeFragment(), true);
-    }
-
-    private void loadFragment(Fragment fragment, boolean isAppInitialized){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (isAppInitialized) {
-            fragmentTransaction.add(R.id.mainlayout, fragment);
-        } else {
-            fragmentTransaction.replace(R.id.mainlayout, fragment);
-        }
-        fragmentTransaction.commit();
     }
 
 
@@ -227,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
     private void OnPaymentResult(PaymentSheetResult paymentSheetResult){
         if (paymentSheetResult instanceof PaymentSheetResult.Completed){
             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+            fetchapi();
         }
     }
 
