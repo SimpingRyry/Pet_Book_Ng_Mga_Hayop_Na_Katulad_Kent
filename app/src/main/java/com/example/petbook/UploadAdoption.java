@@ -5,9 +5,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -16,6 +15,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,17 +40,28 @@ public class UploadAdoption extends AppCompatActivity {
 
     private Button uploadButton;
     private ImageView uploadImage, back;
-    EditText uploadCaption;
+    EditText petName;
     EditText contact;
     EditText description,petage;
     ProgressBar progressBar;
-    Spinner spinner;
-    String status;
+    Spinner ageDescSpinner;
+    String ageDescription;
     private Uri imageUri;
     private SharedPreferences preferences;
     final  private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
     final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+    private boolean isValidContactNumber(String contactnum) { return contactnum.matches("^09\\d{9}$"); }
+    private boolean isAlphabetic(String text) {
+        return text.matches("^[a-zA-Z ]+$");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +70,28 @@ public class UploadAdoption extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         uploadButton = findViewById(R.id.uploadButton);
-        uploadCaption = findViewById(R.id.petname);
+        petName = findViewById(R.id.petname);
         petage = findViewById(R.id.age);
         contact = findViewById(R.id.adoptioncontact);
         back = findViewById(R.id.back);
-
+        ageDescSpinner = findViewById(R.id.ageDesc);
         uploadImage = findViewById(R.id.uploadImage);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.age_descriptions, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ageDescSpinner.setAdapter(adapter);
+        ageDescSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ageDescription = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -121,31 +145,40 @@ public class UploadAdoption extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String caption = uploadCaption.getText().toString();
+                String pet_name = petName.getText().toString();
                 String contactnum = contact.getText().toString();
                 String pet_age = petage.getText().toString();
 
                 if (NetworkUtils.isInternetConnected(getApplicationContext())) {
-                    if (imageUri != null && caption != null && contactnum != null && pet_age != null ){
-                        uploadToFirebase(imageUri);
-                    } else  {
-                        Toast.makeText(UploadAdoption.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    if (imageUri != null) {
+                        if (pet_name != null && !pet_name.isEmpty() && isAlphabetic(pet_name)) {
+                            if (pet_age != null && !pet_age.isEmpty()) {
+                                if (contactnum != null && !contactnum.isEmpty() && isValidContactNumber(contactnum)) {
+                                    uploadToFirebase(imageUri);
+                                } else {
+                                    showAlertDialog("Invalid Contact Number", "Please input your proper contact info");
+                                }
+                            } else {
+                                showAlertDialog("Invalid Age", "Please input your pet's proper age");
+                            }
+                        } else {
+                            showAlertDialog("Invalid Pet Name", "Please input your proper pet name");
+                        }
+                    } else {
+                        showAlertDialog("Image Missing", "Please upload your image");
                     }
-                    // Device is connected to the internet
                 } else {
                     Toast.makeText(getApplicationContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
-                    // Device is not connected to the internet
                 }
-
-
             }
         });
     }
     //Outside onCreate
     private void uploadToFirebase(Uri uri){
-        String caption = uploadCaption.getText().toString();
+        String pet_name = petName.getText().toString();
         String contactnum = contact.getText().toString();
-        String pet_age = petage.getText().toString();
+        String pet_age_num = petage.getText().toString();
+        String pet_age = pet_age_num + " " + ageDescription;
         final StorageReference imageReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         imageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -153,7 +186,7 @@ public class UploadAdoption extends AppCompatActivity {
                 imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        AdoptionDataClass dataClass = new AdoptionDataClass(uri.toString(), caption,pet_age,contactnum,preferences.getString("name", ""));
+                        AdoptionDataClass dataClass = new AdoptionDataClass(uri.toString(), pet_name,pet_age,contactnum,preferences.getString("name", ""));
                         String key = databaseReference.push().getKey();
                         databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("loggedInUser", "")).child("adoptions").child(key).setValue(dataClass);
                         progressBar.setVisibility(View.INVISIBLE);

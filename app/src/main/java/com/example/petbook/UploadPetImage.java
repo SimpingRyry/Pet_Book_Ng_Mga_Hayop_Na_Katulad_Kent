@@ -5,9 +5,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,9 +39,7 @@ public class UploadPetImage extends AppCompatActivity {
 
     private Button uploadButton;
     private ImageView uploadImage,back;
-
-
-    EditText uploadCaption;
+    EditText petName;
     EditText contact;
     ProgressBar progressBar;
     Spinner spinner;
@@ -51,9 +47,18 @@ public class UploadPetImage extends AppCompatActivity {
     private Uri imageUri;
     private SharedPreferences preferences;
     final  private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
     final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+    private boolean isValidContactNumber(String contactnum) { return contactnum.matches("^09\\d{9}$"); }
+    private boolean isAlphabetic(String text) {
+        return text.matches("^[a-zA-Z ]+$");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +66,7 @@ public class UploadPetImage extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         uploadButton = findViewById(R.id.uploadButton);
-        uploadCaption = findViewById(R.id.petname);
+        petName = findViewById(R.id.petname);
         contact = findViewById(R.id.contact);
         uploadImage = findViewById(R.id.uploadImage);
         back = findViewById(R.id.back);
@@ -140,27 +145,32 @@ back.setOnClickListener(new View.OnClickListener() {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String caption = uploadCaption.getText().toString();
+                String pet_name = petName.getText().toString();
                 String contactnum = contact.getText().toString();
+
                 if (NetworkUtils.isInternetConnected(getApplicationContext())) {
-                    if (imageUri != null && caption != null && contactnum != null && status != null ){
-                        uploadToFirebase(imageUri);
-                    } else  {
-                        Toast.makeText(UploadPetImage.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    if (imageUri != null) {
+                        if (pet_name != null && !pet_name.isEmpty() && isAlphabetic(pet_name)) {
+                            if (contactnum != null && !contactnum.isEmpty() && isValidContactNumber(contactnum)) {
+                                uploadToFirebase(imageUri);
+                            } else {
+                                showAlertDialog("Invalid Contact Number", "Please input your proper contact info");
+                            }
+                        } else {
+                            showAlertDialog("Invalid Pet Name", "Please input your proper pet name");
+                        }
+                    } else {
+                        showAlertDialog("Image Missing", "Please upload your image");
                     }
-                    // Device is connected to the internet
                 } else {
                     Toast.makeText(getApplicationContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
-                    // Device is not connected to the internet
                 }
-
-
             }
         });
     }
     //Outside onCreate
     private void uploadToFirebase(Uri uri){
-        String caption = uploadCaption.getText().toString();
+        String caption = petName.getText().toString();
         String contactnum = contact.getText().toString();
         final StorageReference imageReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
         imageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

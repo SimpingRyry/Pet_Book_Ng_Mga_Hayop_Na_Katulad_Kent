@@ -5,9 +5,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -18,8 +17,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +26,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,7 +37,7 @@ public class UploadDonations extends AppCompatActivity {
 
     private Button uploadButton;
     private ImageView uploadImage, back;
-    EditText uploadCaption;
+    EditText petName;
     EditText contact;
     EditText description;
     ProgressBar progressBar;
@@ -53,6 +49,18 @@ public class UploadDonations extends AppCompatActivity {
 
     final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+    private boolean isValidContactNumber(String contactnum) { return contactnum.matches("^09\\d{9}$"); }
+    private boolean isAlphabetic(String text) {
+        return text.matches("^[a-zA-Z ]+$");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +68,7 @@ public class UploadDonations extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         uploadButton = findViewById(R.id.uploadButton);
-        uploadCaption = findViewById(R.id.petname);
+        petName = findViewById(R.id.petname);
         contact = findViewById(R.id.contact);
         description = findViewById(R.id.descriptiondonate);
         uploadImage = findViewById(R.id.uploadImage);
@@ -106,8 +114,6 @@ public class UploadDonations extends AppCompatActivity {
             }
         });
 
-
-
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,28 +127,37 @@ public class UploadDonations extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String caption = uploadCaption.getText().toString();
+                String pet_name = petName.getText().toString();
                 String contactnum = contact.getText().toString();
                 String descriptiontext = description.getText().toString();
+
                 if (NetworkUtils.isInternetConnected(getApplicationContext())) {
-                    if (imageUri != null && caption != null && contactnum != null && descriptiontext != null ){
-                        uploadToFirebase(imageUri);
-                    } else  {
-                        Toast.makeText(UploadDonations.this, "Please fill up required fields", Toast.LENGTH_SHORT).show();
+                    if (imageUri != null) {
+                        if (pet_name != null && !pet_name.isEmpty() && isAlphabetic(pet_name)) {
+                            if (contactnum != null && !contactnum.isEmpty() && isValidContactNumber(contactnum)) {
+                                if (descriptiontext != null && !descriptiontext.isEmpty()) {
+                                    uploadToFirebase(imageUri);
+                                } else {
+                                    showAlertDialog("Invalid Description", "Please input a description for you fundraising activity.");
+                                }
+                            } else {
+                                showAlertDialog("Invalid Contact Number", "Please input your proper contact info");
+                            }
+                        } else {
+                            showAlertDialog("Invalid Pet Name", "Please input your proper pet name");
+                        }
+                    } else {
+                        showAlertDialog("Image Missing", "Please upload your image");
                     }
-                    // Device is connected to the internet
                 } else {
                     Toast.makeText(getApplicationContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
-                    // Device is not connected to the internet
                 }
-
-
             }
         });
     }
     //Outside onCreate
     private void uploadToFirebase(Uri uri){
-        String caption = uploadCaption.getText().toString();
+        String caption = petName.getText().toString();
         String contactnum = contact.getText().toString();
         String descriptiontext = description.getText().toString();
         final StorageReference imageReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));

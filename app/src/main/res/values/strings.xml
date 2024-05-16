@@ -5,9 +5,14 @@
     <string-array name="spinner_items">
         <item>Lost</item>
         <item>Found</item>
-
-        <!-- Add more items if needed -->
     </string-array>
+
+    <string-array name="age_descriptions">
+        <item>Year/s old</item>
+        <item>Month/s old</item>
+        <item>Day/s old</item>
+    </string-array>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

@@ -39,7 +39,6 @@ public class load_user extends Fragment implements UserListerner {
     // TODO: Rename parameter arguments, choose names that match
     SharedPreferences preferences;
     EditText search;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -191,9 +190,6 @@ public class load_user extends Fragment implements UserListerner {
         userrecycler.setAdapter(userAdapters);
         userrecycler.setVisibility(View.VISIBLE);
     }
-
-
-
 }
 
 
