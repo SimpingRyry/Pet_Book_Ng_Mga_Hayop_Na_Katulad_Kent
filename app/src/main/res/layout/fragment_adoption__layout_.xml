@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Adoption_Layout_Fragment"
+    android:background="#7e9684"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/back"
+        android:src="@drawable/baseline_arrow_back_24"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#f1f7fb"
+        android:padding="20dp"
+        android:layout_marginHorizontal="15dp"
+        android:elevation="4dp">  <!-- Add elevation for a subtle shadow -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/image_up"
+            android:id="@+id/uploadImage"
+            android:layout_marginTop="20dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/petname"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:hint="Pet Name..."/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/age"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:hint="Age..."/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/adoptioncontact"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:hint="Contact..."/>
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/uploadButton"
+                android:text="ADOPT"/>
+
+
+            <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:id="@+id/uploadButton"-->
+            <!--                android:layout_marginStart="10dp"-->
+            <!--                android:backgroundTint="#fdb69a"-->
+            <!--                android:src="@drawable/kanarrow"-->
+            <!--                app:tint="@color/white"-->
+            <!--                app:maxImageSize="40dp"/>-->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
