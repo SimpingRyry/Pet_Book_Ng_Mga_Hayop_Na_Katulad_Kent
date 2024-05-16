@@ -2,6 +2,7 @@ package com.example.petbook;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -39,7 +41,21 @@ public class shelter_signup extends AppCompatActivity {
     private  String encodedImage;
 
     FrameLayout prof_frame;
+    private boolean isValidGmail(CharSequence email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches() && email.toString().toLowerCase().endsWith("@gmail.com");
+    }
 
+    private boolean isAlphabetic(String text) {
+        return text.matches("^[a-zA-Z ]+$");
+    }
+
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +65,8 @@ public class shelter_signup extends AppCompatActivity {
 
         signup_email = findViewById(R.id.email);
         name = findViewById(R.id.name);
-
         username = findViewById(R.id.username);
-
         password = findViewById(R.id.password);
-
         address = findViewById(R.id.address);
         signup = findViewById(R.id.signuobtn);
         signin_redirect = findViewById(R.id.signin);
@@ -76,40 +89,47 @@ public class shelter_signup extends AppCompatActivity {
 
                 String email = signup_email.getText().toString();
                 String signup_name = name.getText().toString();
-
                 String signup_username = username.getText().toString();
-
                 String signup_pass = password.getText().toString();
-
                 String signup_address = address.getText().toString();
 
                 if (NetworkUtils.isInternetConnected(getApplicationContext())) {
+                    if (encodedImage != null) {
+                        if (email != null && isValidGmail(email)) {
+                            if (signup_name != null && isAlphabetic(signup_name)) {
+                                if (signup_username != null && !signup_username.isEmpty()) {
+                                    if (signup_pass != null && !signup_pass.isEmpty()) {
+                                        if (signup_address != null && !signup_address.isEmpty()) {
+                                            helperclass helperclass = new helperclass(signup_username,email,signup_pass,signup_address,signup_name,encodedImage);
+                                            databaseReference.child(signup_username).setValue(helperclass);
+                                            Log.d("toast", "success");
+                                            Toast.makeText(com.example.petbook.shelter_signup.this, "Shelter Sign Up Successful", Toast.LENGTH_SHORT).show();
 
-                    if(email != null && signup_name != null && signup_username != null && signup_pass != null && signup_address != null && encodedImage != null){
-                        helperclass helperclass = new helperclass(signup_username,email,signup_pass,signup_address,signup_name,encodedImage);
-                        databaseReference.child(signup_username).setValue(helperclass);
-                        Log.d("toast", "success");
-                        Toast.makeText(com.example.petbook.shelter_signup.this, "Sign Up Successful", Toast.LENGTH_SHORT);
-
-                        Intent intent = new Intent(shelter_signup.this, shelter_login.class);
-                        intent.putExtra("name", data);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
+                                            Intent intent = new Intent(shelter_signup.this, shelter_login.class);
+                                            intent.putExtra("name", data);
+                                            startActivity(intent);
+                                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                        } else {
+                                            showAlertDialog("Address Missing", "Please input the address of the shelter");
+                                        }
+                                    } else {
+                                        showAlertDialog("Password Missing", "Please input your password");
+                                    }
+                                } else {
+                                    showAlertDialog("Shelter Username Missing", "Please input your shelter username");
+                                }
+                            } else {
+                                showAlertDialog("Invalid Shelter Name", "Please input a proper shelter name");
+                            }
+                        } else {
+                            showAlertDialog("Invalid Email Address", "Please input your proper email address");
+                        }
+                    } else {
+                        showAlertDialog("Image Missing", "Please upload your image");
                     }
-
-                    else {
-                        Toast.makeText(com.example.petbook.shelter_signup.this, "Please fill up required fields", Toast.LENGTH_SHORT);
-                    }
-                    // Device is connected to the internet
                 } else {
-                    Toast.makeText(shelter_signup.this,"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
-                    // Device is not connected to the internet
+                    Toast.makeText(shelter_signup.this, "Please ensure network connectivity", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
             }
         });
         signin_redirect.setOnClickListener(new View.OnClickListener() {

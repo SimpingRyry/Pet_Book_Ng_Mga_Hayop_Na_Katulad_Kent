@@ -26,6 +26,7 @@
         android:background="@drawable/textinputbg"
         android:ems="10"
         android:hint="Shelter Username"
+        android:maxLength="30"
         android:inputType="text"
         android:paddingLeft="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +41,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/textinputbg"
         android:ems="10"
-
+        android:maxLength="30"
         android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="20dp"
