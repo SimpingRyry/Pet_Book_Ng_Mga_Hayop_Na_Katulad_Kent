@@ -17,6 +17,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.petbook.adapters.ChatAdapter;
 import com.example.petbook.adapters.Recent_Conversation_Adapter;
 import com.example.petbook.databinding.ActivityChat2Binding;
@@ -30,6 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -311,6 +318,17 @@ public class chat2 extends AppCompatActivity {
         usersRef.child(userId).child("message").setValue(binding.inputMessage.getText().toString());
         usersRef.child(userId).child("timestamp").setValue(new Date());
 
+        getUserType(receiveruser.id, new UserTypeCallback() {
+            @Override
+            public void onUserTypeDetermined(String userType) {
+                if (userType != null) {
+                    getFCMTokenAndSendNotification(receiveruser.id, userType, binding.inputMessage.getText().toString());
+                } else {
+                    Log.e("TAG", "User type for receiver not found");
+                }
+            }
+        });
+
 
 
 
@@ -440,5 +458,108 @@ public class chat2 extends AppCompatActivity {
 
     public void goBack(View view) {
         finish();
+    }
+
+    private void getUserType(String userId, UserTypeCallback callback) {
+        DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference("users").child("user_account").child(userId);
+        DatabaseReference shelterRef = FirebaseDatabase.getInstance().getReference("users").child("shelter").child(userId);
+
+        userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // User ID found in user_account
+                    callback.onUserTypeDetermined("user_account");
+                } else {
+                    // Check shelter node
+                    shelterRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                // User ID found in shelter
+                                callback.onUserTypeDetermined("shelter");
+                            } else {
+                                // User ID not found in either
+                                callback.onUserTypeDetermined(null);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            callback.onUserTypeDetermined(null);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onUserTypeDetermined(null);
+            }
+        });
+    }
+
+    // Callback interface to handle user type determination
+    interface UserTypeCallback {
+        void onUserTypeDetermined(String userType);
+    }
+    private void getFCMTokenAndSendNotification(String receiverUserId, String receiverUserType, String message) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(receiverUserType).child(receiverUserId).child("fcmtoken");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String receiverFCMToken = dataSnapshot.getValue(String.class);
+                    if (receiverFCMToken != null) {
+                        // Send FCM notification
+                        sendFCMNotification(receiverFCMToken, message);
+                    } else {
+                        Log.e("TAG", "Receiver's FCM token is null");
+                    }
+                } else {
+                    Log.e("TAG", "Receiver's FCM token not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("TAG", "Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void sendFCMNotification(String receiverFCMToken, String message) {
+        // Build the FCM notification payload
+        JSONObject notification = new JSONObject();
+        JSONObject notificationBody = new JSONObject();
+        try {
+            notificationBody.put("title", preferences.getString("name", ""));
+            notificationBody.put("body", message);
+            notification.put("to", receiverFCMToken);
+            notification.put("data", notificationBody);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Send the FCM notification using a request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                "https://fcm.googleapis.com/fcm/send",
+                notification,
+                response -> Log.d("TAG", "Notification sent successfully"),
+                error -> Log.e("TAG", "Error sending notification: " + error.getMessage())
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer AAAAb0etIaw:APA91bFH9A3z6jnshFK6vWXxwxg7qRCJ4VJUV5lGWl4T80qWEQR2AWE47ilbcbmmR6k1l_KP7kk19KXNfAZyzbGhzcCtiuOXM9swRALSUk-OncvdwJ1AijbMReNavO_V9E6zEga3GCEm"); // Replace YOUR_SERVER_KEY with your FCM server key
+                return headers;
+            }
+        };
+
+        // Add the request to the RequestQueue
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonObjectRequest);
     }
 }

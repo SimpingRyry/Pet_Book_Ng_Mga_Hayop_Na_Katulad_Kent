@@ -8,7 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
@@ -39,12 +44,25 @@ public class MainActivity extends AppCompatActivity implements DonationsAdapter.
     String customerID;
     String EphericalKey;
     String ClientSecret;
+    private SharedPreferences preferences;
+    final  private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+    private void get_token(){
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::update_token);
+    }
+
+    private void update_token(String token){
+        databaseReference.child(preferences.getString("account_type","")).child(preferences.getString("loggedInUser", "")).child("fcmtoken").setValue(token);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+    get_token();
         FrameLayout framelayout = findViewById(R.id.mainlayout);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         PaymentConfiguration.init(this,PUBLISH_KEY);
