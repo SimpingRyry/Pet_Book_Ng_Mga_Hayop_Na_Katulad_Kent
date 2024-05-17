@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LostAndFoundFragment"
+    tools:context=".Found_Page_Fragment"
     android:background="#7e9684">
 
     <LinearLayout
@@ -20,31 +20,20 @@
             android:layout_gravity="center"
             app:cardBackgroundColor="#7e9684">
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:padding="16dp">
 
                 <TextView
                     android:id="@+id/title_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:fontFamily="monospace"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
                     android:textColor="@color/white"
-                    android:text="Lost and Found:"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/title_text1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:fontFamily="monospace"
-                    android:layout_below="@+id/title_text"
-                    android:text="Missing and found pets"
-                    android:textColor="@color/white"
+                    android:text="FOUND PETS"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -56,7 +45,7 @@
                     app:riv_oval="true"
                     android:scaleType="centerCrop"
                     android:layout_marginTop="4dp"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_gravity="end" />
 
                 <!-- Search Bar inside CardView -->
                 <androidx.cardview.widget.CardView
@@ -69,7 +58,7 @@
                     app:cardElevation="4dp"
                     app:cardCornerRadius="8dp"/>
 
-            </RelativeLayout>
+            </FrameLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -88,42 +77,18 @@
                 android:orientation="vertical">
 
                 <!-- TextView outside ScrollView -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <!-- TextView outside ScrollView -->
                 <LinearLayout
                     android:layout_width="350dp"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lost"
-                        android:id="@+id/btnlost"
-                        android:background="@drawable/rounded_button_left"/>
-
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Found"
-                        android:background="@drawable/rounded_button_righ" />
-
-                </LinearLayout>
+                    android:layout_marginTop="16dp"/>
 
                 <!-- ScrollView with LinearLayout inside -->
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
 
                     <RelativeLayout
                         android:layout_width="match_parent"
