@@ -90,7 +90,6 @@ public class MessagesFragment extends Fragment implements ConversationListener {
             // Device is not connected to the internet
         }
 
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,11 +1,11 @@
 package com.example.petbook;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -20,52 +20,33 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.stripe.android.paymentsheet.PaymentSheet;
 
 import java.util.ArrayList;
 
-public class LostAndFoundFragment extends Fragment {
-
-    public interface OnButton1ClickListener {
-        void onButton1Click();
-    }
-
-    private OnButton1ClickListener mListener;
-    FloatingActionButton fab;
+public class Lost_Page_Fragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<DataClass> dataList;
     private LostAndFoundAdapter adapter;
-    Button lostbtn;
-
     private DatabaseReference databaseReference;
-    PaymentSheet paymentsheet;
-    String customerID;
-    String EphericalKey;
-    String ClientSecret;
+    AppCompatButton appCompatButton1, appCompatButton2;
     RoundedImageView roundedImageView;
     private SharedPreferences preferences;
-
-    AppCompatButton appCompatButton1, appCompatButton2;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lost_and_found, container, false);
+        View view = inflater.inflate(R.layout.fragment_lost_page_, container, false);
 
-        appCompatButton1 = view.findViewById(R.id.btnLost);
+        appCompatButton1 = view.findViewById(R.id.btnAll);
         appCompatButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new Lost_Page_Fragment();
+                Fragment fragment = new LostAndFoundFragment();
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.mainlayout, fragment);
@@ -89,22 +70,6 @@ public class LostAndFoundFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//
-//    }
-
-//@Override
-//public void onCreate(@Nullable Bundle savedInstanceState) {
-//    super.onCreate(savedInstanceState);
-//    // Access PaymentSheet from MainActivity
-//    if (getActivity() != null && getActivity() instanceof MainActivity) {
-//        paymentsheet = ((MainActivity) getActivity()).paymentsheet;
-//    }
-//}
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,25 +79,23 @@ public class LostAndFoundFragment extends Fragment {
         byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
         roundedImageView.setImageBitmap(bitmap);
+        roundedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.mainlayout, new ProfileFragment());
+                transaction.commit();
+            }
+        });
 
-        if (NetworkUtils.isInternetConnected(getContext())) {
-
-            // Device is connected to the internet
-        } else {
-            Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
-            // Device is not connected to the internet
-        }
-
-        fab = view.findViewById(R.id.fab);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dataList = new ArrayList<>();
         adapter = new LostAndFoundAdapter(getContext(), dataList);
         recyclerView.setAdapter(adapter);
-
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
         databaseReference.addValueEventListener(new ValueEventListener() {
 
             @SuppressLint("NotifyDataSetChanged")
@@ -155,10 +118,14 @@ public class LostAndFoundFragment extends Fragment {
                                 String caption = imageSnapshot.child("caption").getValue(String.class);
                                 String contact = imageSnapshot.child("contact").getValue(String.class);
                                 String status = imageSnapshot.child("status").getValue(String.class);
-                                // Create DataClass object for each image
-                                DataClass dataClass = new DataClass(imageUrl, caption, contact,status);
-                                dataClass.setProfimage(image);
-                                dataList.add(dataClass);
+
+                                if (status.equals("Lost")) {
+                                    // Create DataClass object for each image
+                                    DataClass dataClass = new DataClass(imageUrl, caption, contact,status);
+                                    dataClass.setProfimage(image);
+                                    dataList.add(dataClass);
+                                }
+
                             }
                         }
                     }
@@ -172,29 +139,5 @@ public class LostAndFoundFragment extends Fragment {
                 // Handle possible errors
             }
         });
-
-        roundedImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.mainlayout, new ProfileFragment());
-                transaction.commit();
-            }
-        });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), UploadPetImage.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
     }
-
-
-
-
-
 }

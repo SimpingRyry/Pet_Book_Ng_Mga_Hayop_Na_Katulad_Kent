@@ -43,6 +43,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/background_icon"
                     app:riv_oval="true"
+                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:layout_marginTop="4dp"
                     android:layout_gravity="end" />
@@ -82,7 +83,34 @@
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp"/>
+                    android:layout_marginTop="16dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lost"
+                        android:id="@+id/btnLost"
+                        android:background="@drawable/rounded_button_left"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="All"
+                        android:id="@+id/btnAll"
+                        android:background="@drawable/middle_button" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Found"
+                        android:id="@+id/btnFound"
+                        android:textColor="@color/white"
+                        android:background="@drawable/rounded_button_right_selected"/>
+
+                </LinearLayout>
 
                 <!-- ScrollView with LinearLayout inside -->
                 <ScrollView
