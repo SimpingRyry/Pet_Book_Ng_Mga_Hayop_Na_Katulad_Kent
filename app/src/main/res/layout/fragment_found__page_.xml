@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Found_Page_Fragment"
+    android:background="#7e9684">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Upper CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upperCardView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#7e9684">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:text="FOUND PETS"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/top_bar_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/background_icon"
+                    app:riv_oval="true"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="end" />
+
+                <!-- Search Bar inside CardView -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/search_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_text"
+                    android:layout_marginTop="30dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="8dp"/>
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Lower CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/lowerCardView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#f0ac61"
+            app:cardCornerRadius="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- TextView outside ScrollView -->
+                <LinearLayout
+                    android:layout_width="350dp"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"/>
+
+                <!-- ScrollView with LinearLayout inside -->
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/recyclerView"/>
+
+                    </RelativeLayout>
+
+                </ScrollView>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- Floating Action Button positioned to float and not scroll with the content -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/baseline_add_24"
+        android:backgroundTint="#7E9684"/>
+
+</FrameLayout>
