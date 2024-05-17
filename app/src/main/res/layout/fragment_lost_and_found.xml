@@ -96,20 +96,30 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="16dp">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Lost"
-                        android:id="@+id/btnlost"
+                        android:id="@+id/btnLost"
                         android:background="@drawable/rounded_button_left"/>
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="All"
+                        android:id="@+id/btnAll"
+                        android:background="@drawable/middle_button_selected"
+                        android:textColor="@color/white"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Found"
-                        android:background="@drawable/rounded_button_righ" />
+                        android:id="@+id/btnFound"
+                        android:background="@drawable/rounded_button_right"/>
 
                 </LinearLayout>
 
