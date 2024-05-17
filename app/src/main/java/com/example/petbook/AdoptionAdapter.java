@@ -34,8 +34,8 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
         Glide.with(context).load(dataList.get(position).getPet_image()).into(holder.staggeredImages);
         holder.petage.setText(dataList.get(position).getPetage());
         holder.staggeredCaption.setText(dataList.get(position).getPetname());
-        holder.staggeredContact.setText(dataList.get(position).getContact());
-        holder.staggeredStatus.setText(dataList.get(position).getOwner());
+//        holder.staggeredContact.setText(dataList.get(position).getContact());
+//        holder.staggeredStatus.setText(dataList.get(position).getOwner());
 
     }
     @Override
@@ -51,8 +51,8 @@ public class AdoptionAdapter extends RecyclerView.Adapter<AdoptionAdapter.MyView
             petage = itemView.findViewById(R.id.staggeredage);
             staggeredImages = itemView.findViewById(R.id.staggeredImages);
             staggeredCaption = itemView.findViewById(R.id.staggeredCaption);
-            staggeredContact = itemView.findViewById(R.id.staggeredContact);
-            staggeredStatus = itemView.findViewById(R.id.staggeredStatus);
+//            staggeredContact = itemView.findViewById(R.id.staggeredContact);
+//            staggeredStatus = itemView.findViewById(R.id.staggeredStatus);
         }
     }
 }

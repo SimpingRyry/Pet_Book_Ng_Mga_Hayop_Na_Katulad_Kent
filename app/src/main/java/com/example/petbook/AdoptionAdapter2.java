@@ -32,9 +32,8 @@ public class AdoptionAdapter2  extends RecyclerView.Adapter<AdoptionAdapter2.MyV
     public void onBindViewHolder(@NonNull AdoptionAdapter2.MyViewHolder holder, int position) {
         Glide.with(context).load(dataList.get(position).getPet_image()).into(holder.staggeredImages);
         holder.staggeredCaption.setText(dataList.get(position).getPetname());
-        holder.staggeredContact.setText(dataList.get(position).getContact());
         holder.petage.setText(dataList.get(position).getPetage());
-        holder.owner.setText(dataList.get(position).getOwner());
+
 
     }
 
@@ -52,8 +51,8 @@ public class AdoptionAdapter2  extends RecyclerView.Adapter<AdoptionAdapter2.MyV
             staggeredImages = itemView.findViewById(R.id.pet_image);
             staggeredCaption = itemView.findViewById(R.id.staggeredCaption);
             petage = itemView.findViewById(R.id.age);
-            staggeredContact = itemView.findViewById(R.id.staggeredcontact);
-            owner = itemView.findViewById(R.id.owner);
+//            staggeredContact = itemView.findViewById(R.id.staggeredcontact);
+//            owner = itemView.findViewById(R.id.owner);
         }
     }
 }

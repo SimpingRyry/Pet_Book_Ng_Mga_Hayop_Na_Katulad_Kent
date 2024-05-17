@@ -15,9 +15,10 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:id="@+id/staggeredImages"
             app:riv_corner_radius="20dp"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"/>
 
         <TextView
@@ -37,29 +38,6 @@
             android:id="@+id/staggeredage"
             android:textSize="18sp"
             android:text="Caption"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/staggeredContact"
-            android:textSize="18sp"
-            android:text="Contact"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/black"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/staggeredStatus"
-            android:textSize="18sp"
-            android:text="Status"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="20dp"

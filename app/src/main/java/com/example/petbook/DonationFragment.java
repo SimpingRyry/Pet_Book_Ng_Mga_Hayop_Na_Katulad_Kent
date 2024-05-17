@@ -54,8 +54,9 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         roundedImageView = view.findViewById(R.id.top_bar_image);
         String userProf = preferences.getString("userprof", "");
+        String accountype = preferences.getString("account_type","");
 
-
+        fab = view.findViewById(R.id.fab);
         byte[] bytes = Base64.decode(userProf,Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length);
         roundedImageView.setImageBitmap(bitmap);
@@ -66,11 +67,15 @@ public class DonationFragment extends Fragment implements DonationsAdapter.OnBut
             Toast.makeText(getContext(),"Please ensure network connectivity",Toast.LENGTH_SHORT).show();
             // Device is not connected to the internet
         }
-
+        if (accountype.equals("shelter")){
+            fab.setVisibility(View.VISIBLE);
+        }else {
+            fab.setVisibility(View.INVISIBLE);
+        }
 
 
         recyclerView = view.findViewById(R.id.donationrecycler);
-        fab = view.findViewById(R.id.fab);
+
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
