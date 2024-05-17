@@ -140,6 +140,9 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface, OnI
                                 String owner = imageSnapshot.child("owner").getValue(String.class);
                                 // Create DataClass object for each image
                                 AdoptionDataClass dataClass = new AdoptionDataClass(imageUrl, caption, petage,contact,owner);
+
+                                dataClass.setOwnerid(userChild.getKey());
+                                dataClass.setOwnerprof(userChild.child("image").getValue(String.class));
                                 dataList3.add(dataClass);
                             }
 
@@ -190,6 +193,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface, OnI
                                 String owner = imageSnapshot.child("owner").getValue(String.class);
                                 // Create DataClass object for each image
                                 AdoptionDataClass dataClass = new AdoptionDataClass(imageUrl, caption, petage,contact,owner);
+                                dataClass.setOwnerid(userChild.getKey());
+                                dataClass.setOwnerprof(userChild.child("image").getValue(String.class));
                                 dataList2.add(dataClass);
                             }
                         }
@@ -204,7 +209,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface, OnI
             }
         });
 
-        profile = view.findViewById(R.id.profile);
+
         roundedImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,22 +225,28 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface, OnI
     public void onItemClick(int position) {
         // Example: start a new activity or display a detail fragment
      Intent intent = new Intent(getContext(), RecyclerView_MainLayout.class);
-        intent.putExtra("owner",dataList3.get(position).getPet_image());
-     intent.putExtra("owner",dataList3.get(position).getOwner());
-        intent.putExtra("petname",dataList3.get(position).getPetname());
-        intent.putExtra("petage",dataList3.get(position).getPetage());
-        intent.putExtra("contact",dataList3.get(position).getContact());
+        intent.putExtra("petimage",dataList2.get(position).getPet_image());
+     intent.putExtra("owner",dataList2.get(position).getOwner());
+        intent.putExtra("petname",dataList2.get(position).getPetname());
+        intent.putExtra("petage",dataList2.get(position).getPetage());
+        intent.putExtra("contact",dataList2.get(position).getContact());
+        intent.putExtra("ownerid",dataList2.get(position).getOwnerid());
+        intent.putExtra("ownerprof",dataList2.get(position).getOwnerprof());
+
         startActivity(intent);
     }
 
     @Override
     public void onItemClick1(int position) {
         Intent intent = new Intent(getContext(), RecyclerView_MainLayout.class);
-        intent.putExtra("owner",dataList3.get(position).getPet_image());
+        intent.putExtra("petimage",dataList3.get(position).getPet_image());
         intent.putExtra("owner",dataList3.get(position).getOwner());
         intent.putExtra("petname",dataList3.get(position).getPetname());
         intent.putExtra("petage",dataList3.get(position).getPetage());
         intent.putExtra("contact",dataList3.get(position).getContact());
+        intent.putExtra("ownerid",dataList3.get(position).getOwnerid());
+        intent.putExtra("ownerprof",dataList3.get(position).getOwnerprof());
+
         startActivity(intent);
     }
 }

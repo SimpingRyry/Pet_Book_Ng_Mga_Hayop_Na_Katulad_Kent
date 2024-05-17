@@ -1,10 +1,26 @@
 package com.example.petbook;
 
 public class AdoptionDataClass {
-    String pet_image,petname,petage,contact,owner;
+    String pet_image,petname,petage,contact,owner,ownerid,ownerprof;
 
     public String getPetname() {
         return petname;
+    }
+
+    public String getOwnerid() {
+        return ownerid;
+    }
+
+    public void setOwnerid(String ownerid) {
+        this.ownerid = ownerid;
+    }
+
+    public String getOwnerprof() {
+        return ownerprof;
+    }
+
+    public void setOwnerprof(String ownerprof) {
+        this.ownerprof = ownerprof;
     }
 
     public void setPetname(String petname) {

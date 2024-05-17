@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class load_user extends Fragment implements UserListerner {
         TextView errormsg;
         ProgressBar pbar;
         RecyclerView userrecycler;
+        ImageView back;
 
 
         // Inflate the layout for this fragment
@@ -52,10 +54,23 @@ public class load_user extends Fragment implements UserListerner {
         errormsg = rootview.findViewById(R.id.texterror);
         pbar = rootview.findViewById(R.id.pbar);
         search = rootview.findViewById(R.id.user_input);
+        back = rootview.findViewById(R.id.back);
         userrecycler = rootview.findViewById(R.id.rv1);
         GetUsers("", pbar, userrecycler);
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         GetUsers2(pbar,userrecycler);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new MessagesFragment();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.mainlayout, fragment);
+                transaction.addToBackStack(null); // Optional: Adds the transaction to the back stack
+                transaction.commit();
+            }
+        });
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
