@@ -33,7 +33,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerViewInterface, OnItemListener {
     private RecyclerView recyclerView, recyclerView1, shelterpets;
     private ArrayList<shelterDataClass> dataList;
     private ArrayList<DataClass> dataList1;
@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
         shelterpets.setHasFixedSize(true);
         shelterpets.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         dataList3 = new ArrayList<>();
-        adapter2 = new AdoptionAdapter2(dataList3,getContext());
+        adapter2 = new AdoptionAdapter2(dataList3,getContext(),this::onItemClick1);
         shelterpets.setAdapter(adapter2);
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         fab.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +163,7 @@ public class HomeFragment extends Fragment {
         recyclerView1.setHasFixedSize(true);
         recyclerView1.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         dataList2 = new ArrayList<>();
-        adapter1 = new AdoptionAdapter(dataList2, getContext());
+        adapter1 = new AdoptionAdapter(dataList2, getContext(),this::onItemClick);
         recyclerView1.setAdapter(adapter1);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
@@ -216,4 +216,26 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onItemClick(int position) {
+        // Example: start a new activity or display a detail fragment
+     Intent intent = new Intent(getContext(), RecyclerView_MainLayout.class);
+        intent.putExtra("owner",dataList3.get(position).getPet_image());
+     intent.putExtra("owner",dataList3.get(position).getOwner());
+        intent.putExtra("petname",dataList3.get(position).getPetname());
+        intent.putExtra("petage",dataList3.get(position).getPetage());
+        intent.putExtra("contact",dataList3.get(position).getContact());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClick1(int position) {
+        Intent intent = new Intent(getContext(), RecyclerView_MainLayout.class);
+        intent.putExtra("owner",dataList3.get(position).getPet_image());
+        intent.putExtra("owner",dataList3.get(position).getOwner());
+        intent.putExtra("petname",dataList3.get(position).getPetname());
+        intent.putExtra("petage",dataList3.get(position).getPetage());
+        intent.putExtra("contact",dataList3.get(position).getContact());
+        startActivity(intent);
+    }
 }

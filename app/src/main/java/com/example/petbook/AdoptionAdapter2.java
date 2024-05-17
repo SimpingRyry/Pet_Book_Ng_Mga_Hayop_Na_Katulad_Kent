@@ -17,9 +17,11 @@ import java.util.ArrayList;
 public class AdoptionAdapter2  extends RecyclerView.Adapter<AdoptionAdapter2.MyViewHolder>{
     ArrayList<AdoptionDataClass> dataList;
     Context context;
-    public AdoptionAdapter2(ArrayList<AdoptionDataClass> dataList, Context context) {
+    private OnItemListener listener;
+    public AdoptionAdapter2(ArrayList<AdoptionDataClass> dataList, Context context, OnItemListener listener)   {
         this.dataList = dataList;
         this.context = context;
+        this.listener = listener;
     }
     @NonNull
     @Override
@@ -52,6 +54,18 @@ public class AdoptionAdapter2  extends RecyclerView.Adapter<AdoptionAdapter2.MyV
             staggeredCaption = itemView.findViewById(R.id.staggeredCaption);
             petage = itemView.findViewById(R.id.age);
 //            staggeredContact = itemView.findViewById(R.id.staggeredcontact);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick1(position);
+                        }
+                    }
+                }
+            });
 //            owner = itemView.findViewById(R.id.owner);
         }
     }
